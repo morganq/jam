@@ -81,72 +81,72 @@
 				height:100%;
 			}
 		</style>
-		<script language="javascript" src="jsGame.js?1"></script>
-		<script language="javascript">
-			window.onload = function(){
-				var canvasFrame = document.getElementById("right");
-				var evalButton = document.getElementById("eval");
-				var codeText = document.getElementById("code");
-				evalButton.onclick = function(){	
-					canvasFrame.innerHTML = "";
-					var newFrame = document.createElement("iframe");
-					canvasFrame.appendChild(newFrame);
-					newFrame.contentWindow.document.write("<html><head><style>canvas{outline:10px solid #bbb;border:1px solid black;margin:30px auto 0px auto;display:block}</style><body></body><script language=\"javascript\" \
-						src=\"jsGame.js\"><\/script><script>" + codeText.value + "<\/script></html>");
+	<script language="javascript" src="jsGame/jsGame.js?1"></script>
+	<script language="javascript">
+		window.onload = function(){
+			var canvasFrame = document.getElementById("right");
+			var evalButton = document.getElementById("eval");
+			var codeText = document.getElementById("code");
+			evalButton.onclick = function(){	
+				canvasFrame.innerHTML = "";
+				var newFrame = document.createElement("iframe");
+				canvasFrame.appendChild(newFrame);
+				newFrame.contentWindow.document.write("<html><head><style>canvas{outline:10px solid #bbb;border:1px solid black;margin:30px auto 0px auto;display:block}</style><body></body><script language=\"javascript\" \
+					src=\"jsGame/jsGame.js\"><\/script><script>" + codeText.value + "<\/script></html>");
+			}
+			codeText.onkeypress = function(){
+				if(event.shiftKey && event.which == 13){	
+					evalButton.onclick();
+					return false;
 				}
-				codeText.onkeypress = function(){
-					if(event.shiftKey && event.which == 13){	
-						evalButton.onclick();
-						return false;
-					}
-				}
-				evalButton.onclick();
-				
-				var funcbox = document.getElementById("funcbox");
-				for(var i in jsGame)
+			}
+			evalButton.onclick();
+			
+			var funcbox = document.getElementById("funcbox");
+			for(var i in jsGame)
+			{
+				if(jsGame[i].doc !== undefined)
 				{
-					if(jsGame[i].doc !== undefined)
-					{
-						funcbox.innerHTML += "jsGame." + i + ". ";
-						var mod = jsGame[i];
-						for(var k in mod.doc){
-							if(mod.doc[k].module !== undefined) { funcbox.innerHTML += "<span class='doc module'>+<span>from module jsGame."+mod.doc[k].module+"</span></span>"; }
-							var otherdoc = "";
-							if(mod.doc[k].params !== undefined) { otherdoc += "(" + mod.doc[k].params+") " };
-							if(mod.doc[k].desc !== undefined) { otherdoc += "'"+mod.doc[k].desc+"' " };
-							if(otherdoc === ""){
-								funcbox.innerHTML += "<span class='doc " + mod.doc[k].type + "'>" + k + "</span> "
-							}
-							else{
-								funcbox.innerHTML += "<span class='doc " + mod.doc[k].type + "'>" + k + "<span>"+otherdoc+"</span></span> "
-							}
+					funcbox.innerHTML += "jsGame." + i + ". ";
+					var mod = jsGame[i];
+					for(var k in mod.doc){
+						if(mod.doc[k].module !== undefined) { funcbox.innerHTML += "<span class='doc module'>+<span>from module jsGame."+mod.doc[k].module+"</span></span>"; }
+						var otherdoc = "";
+						if(mod.doc[k].params !== undefined) { otherdoc += "(" + mod.doc[k].params+") " };
+						if(mod.doc[k].desc !== undefined) { otherdoc += "'"+mod.doc[k].desc+"' " };
+						if(otherdoc === ""){
+							funcbox.innerHTML += "<span class='doc " + mod.doc[k].type + "'>" + k + "</span> "
 						}
-						funcbox.innerHTML += "<br/>";
+						else{
+							funcbox.innerHTML += "<span class='doc " + mod.doc[k].type + "'>" + k + "<span>"+otherdoc+"</span></span> "
+						}
 					}
+					funcbox.innerHTML += "<br/>";
 				}
-			};
-		</script>
-	</head>
-	<body>
-		<div class="side left" style="padding:10px">
-			<div class="leftbox">
-				<textarea id="code">var game = jsGame.Game(400, 300);
+			}
+		};
+	</script>
+</head>
+<body>
+	<div class="side left" style="padding:10px">
+		<div class="leftbox">
+			<textarea id="code">var game = jsGame.Game(400, 300);
 game.setBGColor(255,255,255);
 
 // Your code here
 
 game.run();
 </textarea><br/>
-				<input type="button" value="evaluate" id="eval" style="margin:auto"/>
-				<span style="color:#aaa;font-style:italic;font-size:10pt;"> or press shift + enter to re-evaluate</span>
-			</div>
-			<div class="leftbox" id="funcbox">
-			</div>
+			<input type="button" value="evaluate" id="eval" style="margin:auto"/>
+			<span style="color:#aaa;font-style:italic;font-size:10pt;"> or press shift + enter to re-evaluate</span>
 		</div>
-		<div class="side right">
-			<div style="position:relative" id="right">
-			</div>
+		<div class="leftbox" id="funcbox">
 		</div>
-		<div style="clear:both"></div>
-	</body>
+	</div>
+	<div class="side right">
+		<div style="position:relative" id="right">
+		</div>
+	</div>
+	<div style="clear:both"></div>
+</body>
 </html>
