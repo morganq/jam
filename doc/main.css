@@ -129,3 +129,18 @@ div.fParams:after  { content:")"; }
 div.fReturns { display:inline; }
 div.fReturns:before { content:" -> " }
 div.fDesc { font-style:italic; text-indent:10px; color:#444; }
+
+pre
+{
+	padding:10px;
+	background-color:#cfe;
+	font-family:monospace;
+	border-radius:5px;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+}
+pre.short
+{
+	height:100px;
+	overflow:scroll;
+}

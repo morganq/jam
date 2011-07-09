@@ -11,7 +11,7 @@
 				<ul>
 					<li><a href="#">Introduction to jsGame</a></li>
 					<li><a href="#">Getting Started</a></li>
-					<li><a href="#">Make something like Pong</a></li>
+					<li><a href="pongtut.php">Make something like Pong</a></li>
 					<li><a href="#">Make something like Mario</a></li>
 				</ul>
 				<h1>Core Reference</h1>

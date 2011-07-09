@@ -32,7 +32,6 @@ jsGame.Input = function(){
 			keys[getName(code)] = true;
 			justPressedKeys.push(getName(code));
 		}
-		
 	};
 	document.onkeyup = function(e){
 		var code = ('which' in e) ? e.which : e.keyCode;
