@@ -47,15 +47,23 @@ jsGame.AnimatedSprite = jsGame.extend(jsGame.Sprite, function(self){
 	// frameHeight
 	self.setImage = function(url, frameWidth, frameHeight)
 	{
-		var tempImage = new Image();
-		tempImage.onload = function(){
-			self.image = tempImage;
+		if(jsGame.cache[url] === undefined)
+		{
+			jsGame.load(url, function(obj){
+				self.image = jsGame.cache[url];
+				self.width = (frameWidth === undefined) ? self.image.width : frameWidth;
+				self.height = (frameHeight === undefined) ?  self.image.height : frameHeight;
+				self.imageLoaded();
+			});
+		}
+		else
+		{
+			self.image = jsGame.cache[url];
 			self.width = (frameWidth === undefined) ? self.image.width : frameWidth;
 			self.height = (frameHeight === undefined) ?  self.image.height : frameHeight;
-			self.imageLoaded();
-		}
-		tempImage.src = url;
-
+			self.imageLoaded();			
+		}		
+		
 	};
 
 	// Simply sets the animation to whatever you pass it.

@@ -20,14 +20,22 @@ jsGame.Sprite = function(x, y){
 	// to it. Automatically adjusts the sprite's width and height.
 	self.setImage = function(url)
 	{
-		var tempImage = new Image();
-		tempImage.onload = function(){
-			self.image = tempImage;
+		if(jsGame.cache[url] === undefined)
+		{
+			jsGame.load(url, function(obj){
+				self.image = obj;
+				self.width = self.image.width;
+				self.height = self.image.height;
+				self.imageLoaded();
+			});
+		}
+		else
+		{
+			self.image = jsGame.cache[url];
 			self.width = self.image.width;
 			self.height = self.image.height;
-			self.imageLoaded();
+			self.imageLoaded();			
 		}
-		tempImage.src = url;
 	}
 
 	// In case you need to do something when the image finishes loading.

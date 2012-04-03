@@ -10,29 +10,29 @@ jsGame = function(){
 	lib.modules = [];
 	lib.cache = {};
 	lib.loaded = false;
-	lib.preload = function(url){
-		console.log("preloading: " + url);
-		if(url.match(/\.(jpeg|jpg|png|gif)$/)){
-			var obj = new Image(url);
+	lib.load = function(url, onload){
+		var obj;
+		if(url.match(/\.(jpeg|jpg|png|gif)(\?.*)?$/)){
+			obj = new Image(url);
+			obj.onload = function(){ onload(obj); };
 			obj.src = url;
-			obj.onload = function(){
-				_preloadCompletedObjects++;
-				console.log("finished preloading: " + url);
-			}
 			lib.cache[url] = obj;
-			_preloadTotalObjects++;
 		}
-		else if (url.match(/\.(mp3|ogg|wav)$/)){
-			obj = document.createElement('audio');
-			obj.setAttribute('src', url);
-			obj.load();
-			obj.onload = function(){
-				_preloadCompletedObjects++;
-				console.log("finished preloading: " + url);
-			}
+		else if (url.match(/\.(mp3|ogg|wav)(\?.*)?$/)){
+			obj = new Audio();
+			obj.addEventListener("loadeddata", function(){ onload(obj); }, false);
+			obj.src = url;
 			lib.cache[url] = obj;
-			_preloadTotalObjects++;	
 		}
+		return obj;
+	}
+	lib.preload = function(url){
+		lib.log("preloading: " + url);
+		_preloadTotalObjects++;	
+		lib.load(url, function(obj){
+				_preloadCompletedObjects++;
+				lib.log("finished preloading: " + url);
+			});
 	}
 	var _showPreloader = function(context, callback)
 	{
