@@ -25,7 +25,7 @@ jsGame.Meta.extend = function(fOld, fAdd, returnSecond, passObject)
 	return fNew;
 }
 
-// Puts all the properties from an object into the constructor of another
+// Puts all the properties from an object into the constructor of another.
 // Mixin pattern, extend some class (cOld) with contents of another (cMix)
 jsGame.Meta.mixin = function(cOld, cMix)
 {

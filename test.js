@@ -1,11 +1,10 @@
 window.onload = function(){
-	jsGame.loadFileAsync("lvl1.map", initialize);
-	jsGame.Sound.load("data/coin.wav");
-	jsGame.Sound.load("data/jump.wav");
-	jsGame.Sound.load("data/shoot.wav");
-	jsGame.Sound.load("data/hurt.wav");
-	jsGame.Sound.load("data/kill.wav");
-	jsGame.Sound.load("data/win.wav");
+	jsGame.Sound.load("./data/coin.wav");
+	jsGame.Sound.load("./data/jump.wav");
+	jsGame.Sound.load("./data/shoot.wav");
+	jsGame.Sound.load("./data/hurt.wav");
+	jsGame.Sound.load("./data/kill.wav");
+	jsGame.Sound.load("./data/win.wav");
 }
 
 function initialize(mapData)
@@ -79,7 +78,7 @@ function initialize(mapData)
 
 	/**** Create the player ****/
 	var player = jsGame.Sprite(50,0);
-	player.setImageColorKey("data/GunstarRed.gif", 38, 40);
+	player.setImageColorKey("./data/GunstarRed.gif", 38, 40);
 
 	var runAnim = jsGame.Animation.Strip([0,1,2,3,4,5], 45, 40, 6.0, 112, 0);
 	var standAnim = jsGame.Animation.Strip([0,1], 35, 40, 1.0, 0, 0);
@@ -101,7 +100,7 @@ function initialize(mapData)
 	player.update = jsGame.extend(player.update, function(){
 		if(level){level.collide(player);}
 		player.overlaps(coinGroup, function(a, b){
-			jsGame.Sound.play("data/coin.wav");
+			jsGame.Sound.play("./data/coin.wav");
 			player.getcoin = true;
 			player.height = 55;
 			game.remove(b);
@@ -111,7 +110,7 @@ function initialize(mapData)
 			if(b.dying){return;}
 			if(!player.flashing)
 			{
-				jsGame.Sound.play("data/hurt.wav");
+				jsGame.Sound.play("./data/hurt.wav");
 				player.health -= 50;
 				player.flash(1.0);
 			}
@@ -122,7 +121,7 @@ function initialize(mapData)
 		});
 		if(player.overlaps(finishFlag))
 		{
-			jsGame.Sound.play("data/win.wav");
+			jsGame.Sound.play("./data/win.wav");
 			var s = jsGame.Sprite(game.camera.scroll.x + 40, game.camera.scroll.y - 20);
 			game.update = function(){};
 			s.setImage("http://2.bp.blogspot.com/_NwXiQ3VfUFI/TQsZzZUfnqI/AAAAAAAAAVU/4Ybx_V3SgdE/s1600/You%2BWin.jpg");
@@ -156,7 +155,7 @@ function initialize(mapData)
 		if ( jsGame.Input.justPressed("X") && !player.getcoin && !player.shooting )
 		{
 			jsGame.timer(200, function(){
-				jsGame.Sound.play("data/shoot.wav");
+				jsGame.Sound.play("./data/shoot.wav");
 				var missile = jsGame.Sprite(player.x, player.y + 10);
 				missile.setImage("http://www.attiliocarotenuto.com/articlesfiles/article115/laser.png");	
 				jsGame.timer(400, function(){
@@ -172,7 +171,7 @@ function initialize(mapData)
 			//jsGame.Sound.play("http://rpg.hamsterrepublic.com/wiki-images/2/21/Collision8-Bit.ogg");
 		}
 		if( jsGame.Input.justPressed("UP") && player.touchingBottom && !player.getcoin && !player.shooting) {
-			jsGame.Sound.play("data/jump.wav");
+			jsGame.Sound.play("./data/jump.wav");
 			player.velocity.y = -440;
 			//jsGame.Sound.play("http://rpg.hamsterrepublic.com/wiki-images/d/db/Crush8-Bit.ogg");
 			jsGame.log("derp");

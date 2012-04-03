@@ -30,10 +30,7 @@ jsGame.Animation.Strip = function(frames, frameWidth, frameHeight, rate, offsetX
 	return animation;
 }
 
-// Modify the Sprite constructor so we fill the Sprite object with a bunch more
-// properties and replace some of its methods
-
-jsGame.Sprite = jsGame.extend(jsGame.Sprite, function(self){
+jsGame.AnimatedSprite = jsGame.extend(jsGame.Sprite, function(self){
 	// "static" constants so that we don't have to remember that
 	// 0 = left and 1 = right. These control if the sprite is flipped
 	// horizontally or not.
@@ -129,5 +126,3 @@ jsGame.Sprite = jsGame.extend(jsGame.Sprite, function(self){
 	return self;
 },true, true);
 
-jsGame.Sprite.doc.setImage = {type:"function", module:"Animation", params:["url", "frameWidth"], desc:"Load a sprite sheet."};
-jsGame.Sprite.doc.playAnimation = {type:"function", module:"Animation", params:["frames", "rate", "[offx]", "[offy]"]};

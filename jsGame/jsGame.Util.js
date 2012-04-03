@@ -16,7 +16,7 @@ jsGame.loadFileAsync = function(url, callback){
 			if (request.status === 200) {
 				callback(request.responseText);
 			}
-	  	}
+		}
 	}
 	request.send(null);
 }

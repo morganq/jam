@@ -1,7 +1,8 @@
 // This module allows you to load an image into an animated Sprite and 
 // replace a certain RGB value with transparent. This is especially good
 // if taking the sprite from some online source. 
-jsGame.Sprite = jsGame.extend(jsGame.Sprite, function(self){
+jsGame.includeModule("Animation");
+jsGame.AnimatedSprite = jsGame.extend(jsGame.AnimatedSprite, function(self){
 
 	// This function loops through all the pixels and replaces the specific
 	// color with transparent. 

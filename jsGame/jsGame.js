@@ -5,12 +5,12 @@ jsGame = function(){
 	var lib = {};
 	var startTime = (new Date()).getTime();
 	lib.modules = [];
-	lib.includeModule = function(name){
+	lib.include = function(name){
 
-		// Could be pretty bad to include a module multiple times
+		// Could be pretty bad to include a file multiple times
 		if(lib.modules.indexOf(name) !== -1)
 		{
-			lib.log("Module " + name + " has already been loaded. Skipping.");
+			lib.log("File " + name + " has already been included. Skipping.");
 			return;
 		}
 
@@ -18,9 +18,10 @@ jsGame = function(){
 		// extra random data on the url with ?
 		var nocache = Math.random();
 
-		document.write("<script language='javascript' src='jsGame/jsGame."+name+".js?" + nocache + "'></script>");
+		document.write("<script language='javascript' src='" + name + "?" + nocache + "'></script>");
 		lib.modules.push(name);
 	}
+	lib.includeModule = function(name){ lib.include("jsGame/jsGame."+name+".js"); }
 	
 	// Log is viewable by checking this object or through some debug implementation
 	// in a debug module
@@ -39,11 +40,4 @@ jsGame.includeModule("Sprite");
 jsGame.includeModule("Input");
 jsGame.includeModule("Vector");
 jsGame.includeModule("Sound");
-jsGame.includeModule("RectCollision");
-jsGame.includeModule("ProtoTools");
-jsGame.includeModule("Animation");
-jsGame.includeModule("Debug");
-jsGame.includeModule("LevelMap");
-jsGame.includeModule("ColorKey");
-jsGame.includeModule("FlashSprite");
 jsGame.includeModule("Text");

@@ -1,13 +1,14 @@
 // Adds some functionality to various modules for debug purposes
 
-// Add a box around all sprites so we can see their collision boxes
-jsGame.Sprite = jsGame.extend(jsGame.Sprite, function(self){
+jsGame.Debug = {};
 
-		self.render = jsGame.extend(self.render, function(context, camera)
-		{
+// Add a box around all sprites so we can see their collision boxes
+jsGame.Debug.debugRenderExtension = function(self){
+
+		self.render = jsGame.extend(self.render, function(context, camera) {
 			if(!jsGame.Debug.showBoundingBoxes) { return; }
 			context.lineWidth = 1;
-			context.strokeStyle = "rgba(0,0,0,0.5)";
+			context.strokeStyle = "rgba(255,0,0,0.5)";
 			context.strokeRect(	Math.floor(self.x - camera.scroll.x)+0.5,
 								Math.floor(self.y - camera.scroll.y)+0.5,
 								self.width, self.height);
@@ -15,7 +16,9 @@ jsGame.Sprite = jsGame.extend(jsGame.Sprite, function(self){
 		
 		return self;
 		
-}, true, true);
+};
+jsGame.Sprite = jsGame.extend(jsGame.Sprite, jsGame.Debug.debugRenderExtension, true, true);
+if(jsGame.AnimatedSprite) { jsGame.AnimatedSprite = jsGame.extend(jsGame.AnimatedSprite, jsGame.Debug.debugRenderExtension, true, true); }
 
 // Draws some text for each log message
 jsGame.Game = jsGame.extend(jsGame.Game, function(self){
@@ -38,8 +41,6 @@ jsGame.Game = jsGame.extend(jsGame.Game, function(self){
 	});
 	return self;
 }, true, true);
-
-jsGame.Debug = {};
 
 // Various debug features can be enabled or disabled individually:
 jsGame.Debug.showBoundingBoxes = false;

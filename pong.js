@@ -1,10 +1,18 @@
+jsGame.includeModule("ProtoTools");
+jsGame.includeModule("RectCollision");
+jsGame.includeModule("Debug");
+
 window.onload = function(){
+
 	initialize();
 }
 
 function initialize(){
 	var game = jsGame.Game(500, 300);
+	game.fps = 40;
 
+	jsGame.Debug.showBoundingBoxes = true;
+	
 	// Dumb way to put a border around the game
 	game._canvas.style.border="1px solid black";
 

@@ -23,8 +23,8 @@ jsGame.Game = function(width, height, parentElement){
 
 	// If they didn't supply this argument, assume the doc body
 	// as the parent element for the canvas
-	if(parentElement === undefined){
-		parentElement = document.body;	
+	if(parentElement === undefined || parentElement === null){
+		parentElement = document.body;
 	}
 	parentElement.appendChild(self._canvas);
 
