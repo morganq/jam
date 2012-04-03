@@ -2,9 +2,67 @@
 // This will preserve a nice single namespace for everything jsGame related.
 
 jsGame = function(){
+	var _preloadCompletedObjects = 0;
+	var _preloadTotalObjects = 0;
+
 	var lib = {};
 	var startTime = (new Date()).getTime();
 	lib.modules = [];
+	lib.cache = {};
+	lib.loaded = false;
+	lib.preload = function(url){
+		console.log("preloading: " + url);
+		if(url.match(/\.(jpeg|jpg|png|gif)$/)){
+			var obj = new Image(url);
+			obj.src = url;
+			obj.onload = function(){
+				_preloadCompletedObjects++;
+				console.log("finished preloading: " + url);
+			}
+			lib.cache[url] = obj;
+			_preloadTotalObjects++;
+		}
+		else if (url.match(/\.(mp3|ogg|wav)$/)){
+			obj = document.createElement('audio');
+			obj.setAttribute('src', url);
+			obj.load();
+			obj.onload = function(){
+				_preloadCompletedObjects++;
+				console.log("finished preloading: " + url);
+			}
+			lib.cache[url] = obj;
+			_preloadTotalObjects++;	
+		}
+	}
+	var _showPreloader = function(context, callback)
+	{
+		if(_preloadCompletedObjects < _preloadTotalObjects)
+		{
+			window.setTimeout(function() { _showPreloader(context, callback); }, 50);
+			context.fillStyle = "rgba(0,0,0,1)";
+			context.fillRect(context.canvas.width / 2 - 102, context.canvas.height / 2 - 12, 204, 24);
+			context.fillStyle = "rgba(255,255,255,1)";
+			context.fillRect(context.canvas.width / 2 - 100, context.canvas.height / 2 - 10, 200, 20);
+			context.fillStyle = "rgba(0,255,128,1)";
+			context.fillRect(context.canvas.width / 2 - 100, context.canvas.height / 2 - 10, _preloadCompletedObjects * 200.0 / _preloadTotalObjects, 20);
+		}
+		else
+		{
+			context.canvas.parentNode.removeChild(context.canvas);
+			callback();
+		}
+	}
+	lib.showPreloader = function(element, callback)
+	{
+		var _canvas = document.createElement("canvas"); 
+		var _context = _canvas.getContext("2d");
+		element.appendChild(_canvas);
+		_canvas.width = element.clientWidth;
+		_canvas.height = element.clientHeight;
+		_context.width = element.clientWidth;
+		_context.height = element.clientHeight;
+		_showPreloader(_context, callback);
+	}
 	lib.include = function(name){
 
 		// Could be pretty bad to include a file multiple times

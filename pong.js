@@ -2,9 +2,14 @@ jsGame.includeModule("ProtoTools");
 jsGame.includeModule("RectCollision");
 jsGame.includeModule("Debug");
 
-window.onload = function(){
 
-	initialize();
+window.onload = function(){
+	jsGame.preload("http://peach.blender.org/wp-content/uploads/big_big_buck_bunny.jpg");
+	jsGame.preload("http://apod.nasa.gov/apod/image/9712/orionfull_jcc_big.jpg");
+	jsGame.preload("http://www.surftravelcompany.com/big-wave-pics/big-wave.jpg");
+	jsGame.preload("http://myrentalpad.com/wp-content/uploads/2010/03/cant-have-anything-nice.gif");
+	jsGame.preload("http://peach.blender.org/wp-content/uploads/big_big_buck_bunny.jpg");
+	jsGame.showPreloader(document.body, initialize);
 }
 
 function initialize(){
