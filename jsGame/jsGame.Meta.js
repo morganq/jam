@@ -8,7 +8,6 @@ jsGame.Meta = {};
 // of fNew? Useful to extend a class constructor!!
 jsGame.Meta.extend = function(fOld, fAdd, returnSecond, passObject)
 {
-	var doc = fOld.doc;
 	fNew = function(){
 		var returnValue1 = fOld.apply(null,arguments);
 		if(passObject) { 
@@ -21,7 +20,6 @@ jsGame.Meta.extend = function(fOld, fAdd, returnSecond, passObject)
 		var returnValue2 = fAdd.apply(null, passObject ? args : arguments);
 		return (returnSecond === true) ? returnValue2 : returnValue1;
 	};
-	fNew.doc = doc;
 	return fNew;
 }
 
@@ -29,7 +27,6 @@ jsGame.Meta.extend = function(fOld, fAdd, returnSecond, passObject)
 // Mixin pattern, extend some class (cOld) with contents of another (cMix)
 jsGame.Meta.mixin = function(cOld, cMix)
 {
-	var doc = cOld.doc;
 	cNew = function(){
 		self = cOld.apply(null, arguments);
 		for (var key in cMix){
@@ -38,7 +35,6 @@ jsGame.Meta.mixin = function(cOld, cMix)
 
 		return self;
 	}
-	cNew.doc = doc;
 	return cNew;
 }
 

@@ -26,6 +26,7 @@ jsGame = function(){
 		}
 		return obj;
 	}
+	
 	lib.preload = function(url){
 		lib.log("preloading: " + url);
 		_preloadTotalObjects++;	
@@ -34,6 +35,7 @@ jsGame = function(){
 				lib.log("finished preloading: " + url);
 			});
 	}
+	
 	var _showPreloader = function(context, callback)
 	{
 		if(_preloadCompletedObjects < _preloadTotalObjects)
@@ -52,6 +54,7 @@ jsGame = function(){
 			callback();
 		}
 	}
+	
 	lib.showPreloader = function(element, callback)
 	{
 		var _canvas = document.createElement("canvas"); 
@@ -63,8 +66,8 @@ jsGame = function(){
 		_context.height = element.clientHeight;
 		_showPreloader(_context, callback);
 	}
+	
 	lib.include = function(name){
-
 		// Could be pretty bad to include a file multiple times
 		if(lib.modules.indexOf(name) !== -1)
 		{

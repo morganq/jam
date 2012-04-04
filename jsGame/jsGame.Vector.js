@@ -6,8 +6,10 @@ jsGame.Vector = function(x, y){
 	var self = {};
 	self.x = x;
 	self.y = y;
+	self.toString = function() { return "<" + self.x + ", " + self.y + ">"; };
 	return self;
 }
+
 
 jsGame.Vector.getLength = function(v){
 	return Math.sqrt(v.x*v.x + v.y*v.y);
@@ -37,10 +39,6 @@ jsGame.Vector.div = function(v, s){
 	return jsGame.Vector(v.x / s, v.y / s);
 }
 
-
-jsGame.Vector.doc = {};
-jsGame.Vector.doc.Vector = {type:"constructor", params:["x","y"]};
-jsGame.Vector.doc.add = {type:"function", params:["v1", "v2"]};
-jsGame.Vector.doc.sub = {type:"function", params:["v1", "v2"]};
-jsGame.Vector.doc.mul = {type:"function", params:["v", "scalar"]};
-jsGame.Vector.doc.div = {type:"function", params:["v", "scalar"]};
+jsGame.Vector.compare = function(v1, v2){
+	return v1.x == v2.x && v1.y == v2.y;
+}

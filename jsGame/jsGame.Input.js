@@ -6,7 +6,9 @@
 jsGame.Input = function(){
 	// Based on a keycode, get a string name for the key.
 	// Special cases for arrow keys, right now
-	var getName = function(code){
+	var self = {}
+	
+	getName = function(code){
 		if(code >= 65 && code <= 90) { return String.fromCharCode(code); }
 		else if(code >= 97 && code <= 122){
 			return String.fromCharCode(code).toUpperCase();
@@ -50,15 +52,14 @@ jsGame.Input = function(){
 	// Gotta add our update at the end of the game update. We need
 	// an update function to make sure the justPressed and justReleased
 	// lists work right.
-	jsGame.Game = jsGame.extend(jsGame.Game, function(self){
-		self.update = jsGame.extend(self.update, function(){
-			update();	
+	jsGame.Game = jsGame.extend(jsGame.Game, function(cls){
+		cls.update = jsGame.extend(cls.update, function(){
+			self.update();	
 		});
-		return self;
+		return cls;
 	}, true, true);
 
-
-	return {
+	self = {
 		keyDown : function(name){
 			return keys[name];
 		},
@@ -69,14 +70,13 @@ jsGame.Input = function(){
 		
 		justReleased : function(name){
 			return justReleasedKeys.indexOf(name) !== -1;
-		}		
+		},
+		
+		update : update
 	};
+	
+	return self;
+
 
 }();
-
-
-jsGame.Input.doc = {};
-jsGame.Input.doc.keyDown = {type:"function", params:["keyName"]};
-jsGame.Input.doc.justPressed = {type:"function", params:["keyName"]};
-jsGame.Input.doc.justReleased = {type:"function", params:["keyName"]};
 

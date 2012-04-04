@@ -1,4 +1,5 @@
 jsGame.includeModule("Debug");
+jsGame.includeModule("ArcadeInput");
 
 window.onload = function(){
 	jsGame.preload("http://www.softendo.com/public/styles/images/icon_mario.jpg");
@@ -32,22 +33,17 @@ makePlayer = function(){
 	game.add(m);
 	
 	m.update = jsGame.ex(m.update, function(elapsed){
-		m.velocity.x = m.velocity.y = 0;
-		if(jsGame.Input.keyDown("DOWN")){
-			m.velocity.y = 80;
-		}
-		if(jsGame.Input.keyDown("UP")){
-			m.velocity.y = -80;
-		}
-		if(jsGame.Input.keyDown("LEFT")){
-			m.velocity.x = -80;
-		}
-		if(jsGame.Input.keyDown("RIGHT")){
-			m.velocity.x = 80;
-		}		
+		m.velocity.x = m.velocity.y = 0;	
 		
 		if(jsGame.Input.justPressed("X")){
 			jsGame.Sound.play("./data/coin.wav");
+		}
+		
+		m.velocity.x = jsGame.Input.joy.x * 130;
+		m.velocity.y = jsGame.Input.joy.y * 130;
+		
+		if(jsGame.Input.joyJustChanged){
+			jsGame.log(jsGame.Input.joy.toString());
 		}
 	});
 	
