@@ -31,7 +31,7 @@ makePlayer = function(){
 	var m = jsGame.Sprite(200, 150);
 	m.setImage("http://www.softendo.com/public/styles/images/icon_mario.jpg");
 	game.add(m);
-	
+
 	m.update = jsGame.ex(m.update, function(elapsed){
 		m.velocity.x = m.velocity.y = 0;	
 		
@@ -45,6 +45,7 @@ makePlayer = function(){
 		if(jsGame.Input.joyJustChanged){
 			jsGame.log(jsGame.Input.joy.toString());
 		}
+		
 	});
 	
 	return m;

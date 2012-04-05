@@ -1,3 +1,19 @@
+/*	SAMPLE USAGE:
+
+** hello world game **
+window.onload = function(){
+	var game = jsGame.Game(640, 480, document.body);
+
+	var hello = jsGame.Text(320, 240);
+	hello.text = "hello world";
+	hello.color = "rgb(0,0,0)";
+	game.add(hello);
+
+	game.run();
+}
+
+*/
+
 jsGame.Game = function(width, height, parentElement){
 	var self = {};
 
@@ -92,16 +108,4 @@ jsGame.Game = function(width, height, parentElement){
 
 	return self;
 };
-
-jsGame.Game.doc = {};
-jsGame.Game.doc.Game = {type : "constructor", params :["width", "height", "parentElement"]};
-jsGame.Game.doc.width = {type : "property"};
-jsGame.Game.doc.height = {type : "property"};
-jsGame.Game.doc.fps = {type : "property"};
-jsGame.Game.doc.update = {type : "function", params : []};
-jsGame.Game.doc.render = {type : "function", params : []};
-jsGame.Game.doc.setBGColor= {type : "function", params : ["r","g","b"]};
-jsGame.Game.doc.add = {type : "function", params : ["sprite"], desc : "Add a sprite to the game to be rendered and updated"};
-jsGame.Game.doc.run = {type : "function", params : [], desc : "Runs the game loop."};
-
 

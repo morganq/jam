@@ -1,4 +1,19 @@
 // A sprite-like object which renders by drawing text to the screen
+
+/*	SAMPLE USAGE:
+	
+** Score display **
+var score = 0;
+var scoreText = jsGame.Text(10, 30);
+scoreText.font = "16pt monospace";
+scoreText.color = "rgb(0,0,0)";
+game.add(scoreText);
+
+// in update
+scoreText.text = score;
+
+*/
+
 jsGame.Text = jsGame.extend(jsGame.Sprite, function(self){
 
 	self.text = "";

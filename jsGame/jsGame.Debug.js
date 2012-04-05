@@ -1,5 +1,12 @@
 // Adds some functionality to various modules for debug purposes
 
+/*	SAMPLE USAGE:
+** Tilde shows the log **
+if(jsGame.Input.justPressed("~")) { jsGame.Debug.showLog = !jsGame.Debug.showLog; }
+if(some_condition) { jsGame.log("something happened!"); }
+
+*/
+
 jsGame.Debug = {};
 
 // Add a box around all sprites so we can see their collision boxes
