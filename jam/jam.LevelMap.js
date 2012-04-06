@@ -2,13 +2,13 @@
 // Handles rendering the portion of the map which is visible and collisions
 // Useful for platformers or RPGs, and other things probably
 
-jsGame.LevelMap = function(tilesize, w, h, image){
+jam.LevelMap = function(tilesize, w, h, image){
 	var self = {};
 	self.tiles = [];
 	self.tilesize = tilesize;
 
 	// The LevelMap should function like a collisongroup for tiles.
-	self.tileCollisionGroup = jsGame.CollisionGroup();
+	self.tileCollisionGroup = jam.CollisionGroup();
 	self.image = null;
 
 	// We have to pretend no image has been given (so it stays null) until it
@@ -107,7 +107,7 @@ jsGame.LevelMap = function(tilesize, w, h, image){
 
 // A Tile object is basically a Sprite with less stuff in it. It just needs to
 // be able to draw and collide. 
-jsGame.LevelMap.Tile = function(x, y, imageIndex, collide){
+jam.LevelMap.Tile = function(x, y, imageIndex, collide){
 	var self = {};
 	self.x = x * 32;
 	self.y = y * 32;
@@ -115,8 +115,8 @@ jsGame.LevelMap.Tile = function(x, y, imageIndex, collide){
 	self.height = 32;
 	self.velocity = {x:0, y:0};
 	self.collides = (collide === undefined) ? true : collide;
-	self.overlaps = function(other, callback) { return jsGame.Collision.overlaps(self, other, callback); }
-	self.collide = function(other) { return jsGame.Collision.collide(self, other); }
+	self.overlaps = function(other, callback) { return jam.Collision.overlaps(self, other, callback); }
+	self.collide = function(other) { return jam.Collision.collide(self, other); }
 	self.immovable = true;
 	self.imageIndex = imageIndex;
 	return self;
@@ -126,7 +126,7 @@ jsGame.LevelMap.Tile = function(x, y, imageIndex, collide){
 // a sprite sheet for the tiles, and an optional table of functions to call
 // upon seeing a tile with a given index. It then creates a map be reading the
 // CSV data and placing the appropriate tiles.
-jsGame.LevelMap.loadTileMap = function(tilesize, data, tilestrip, indices){
+jam.LevelMap.loadTileMap = function(tilesize, data, tilestrip, indices){
 	// Parse CSV (commas between cells, newlines between rows)
 	var lines = data.split("\n");
 	var h = lines.length;
@@ -134,7 +134,7 @@ jsGame.LevelMap.loadTileMap = function(tilesize, data, tilestrip, indices){
 	var w = lines[0].split(",").length;
 	if(w === 0) { return; }
 
-	var map = jsGame.LevelMap(tilesize, w, h, tilestrip);
+	var map = jam.LevelMap(tilesize, w, h, tilestrip);
 
 	for(var y = 0; y < h; ++y)
 	{
@@ -147,7 +147,7 @@ jsGame.LevelMap.loadTileMap = function(tilesize, data, tilestrip, indices){
 				// If there's a function callback for this tileindex, call it.
 				// But usually just place the tile.
 				if(indices[index] === undefined){
-					var t = jsGame.LevelMap.Tile(x, y, index, true);
+					var t = jam.LevelMap.Tile(x, y, index, true);
 					map.put(t, x, y);
 				}
 				else
@@ -159,6 +159,3 @@ jsGame.LevelMap.loadTileMap = function(tilesize, data, tilestrip, indices){
 	}
 	return map;
 };
-
-jsGame.LevelMap.doc = {};
-jsGame.LevelMap.doc.loadTileMap = {type:"function", params:["tilesize", "data", "tilestrip", "[indices]"], desc:"Loads a map from a string. Indices is an object with tile-number keys and function(map,x,y) values"};

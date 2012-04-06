@@ -4,7 +4,7 @@
 	
 ** Score display **
 var score = 0;
-var scoreText = jsGame.Text(10, 30);
+var scoreText = jam.Text(10, 30);
 scoreText.font = "16pt monospace";
 scoreText.color = "rgb(0,0,0)";
 game.add(scoreText);
@@ -14,7 +14,7 @@ scoreText.text = score;
 
 */
 
-jsGame.Text = jsGame.extend(jsGame.Sprite, function(self){
+jam.Text = jam.extend(jam.Sprite, function(self){
 
 	self.text = "";
 	self.font = "";

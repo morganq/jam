@@ -3,7 +3,7 @@
 // and invisible rapidly for the supplied number of seconds.
 
 // Check if the sprite is flashing by looking at its mySprite.flashing 
-jsGame.Sprite = jsGame.extend(jsGame.Sprite, function(self){
+jam.Sprite = jam.extend(jam.Sprite, function(self){
 	self.flashTimer = 0;
 	self.flashing = false;
 	self.flash = function(t){
@@ -14,7 +14,7 @@ jsGame.Sprite = jsGame.extend(jsGame.Sprite, function(self){
 		}
 	}
 
-	self.update = jsGame.extend(self.update, function(elapsed){
+	self.update = jam.extend(self.update, function(elapsed){
 		self.flashTimer -= elapsed;
 		if(self.flashTimer <= 0)
 		{

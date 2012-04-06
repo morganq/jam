@@ -1,4 +1,4 @@
-jsGame.Meta = {};
+jam.Meta = {};
 
 // Adds a function call to the end of an existing function
 // -fOld = the function to call first (and return the value of)
@@ -6,7 +6,7 @@ jsGame.Meta = {};
 // -returnSecond = optional boolean, return the second func result instead?
 // -psasObject = optional boolean, pass the return value of fOld as first argument
 // of fNew? Useful to extend a class constructor!!
-jsGame.Meta.extend = function(fOld, fAdd, returnSecond, passObject)
+jam.Meta.extend = function(fOld, fAdd, returnSecond, passObject)
 {
 	fNew = function(){
 		var returnValue1 = fOld.apply(null,arguments);
@@ -25,7 +25,7 @@ jsGame.Meta.extend = function(fOld, fAdd, returnSecond, passObject)
 
 // Puts all the properties from an object into the constructor of another.
 // Mixin pattern, extend some class (cOld) with contents of another (cMix)
-jsGame.Meta.mixin = function(cOld, cMix)
+jam.Meta.mixin = function(cOld, cMix)
 {
 	cNew = function(){
 		self = cOld.apply(null, arguments);
@@ -39,5 +39,5 @@ jsGame.Meta.mixin = function(cOld, cMix)
 }
 
 // We want extend to be as easily accessible as possible.
-jsGame.extend = jsGame.Meta.extend;
-jsGame.ex = jsGame.Meta.extend;
+jam.extend = jam.Meta.extend;
+jam.ex = jam.Meta.extend;

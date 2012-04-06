@@ -2,9 +2,9 @@
 
 ** hello world game **
 window.onload = function(){
-	var game = jsGame.Game(640, 480, document.body);
+	var game = jam.Game(640, 480, document.body);
 
-	var hello = jsGame.Text(320, 240);
+	var hello = jam.Text(320, 240);
 	hello.text = "hello world";
 	hello.color = "rgb(0,0,0)";
 	game.add(hello);
@@ -14,7 +14,7 @@ window.onload = function(){
 
 */
 
-jsGame.Game = function(width, height, parentElement){
+jam.Game = function(width, height, parentElement){
 	var self = {};
 
 // Private
@@ -32,8 +32,8 @@ jsGame.Game = function(width, height, parentElement){
 	self.fps = 80;		// Frequency
 	self.elapsed = 0; 	// Period
 	self.camera = {
-		scroll:jsGame.Vector(0,0),
-		size:jsGame.Vector(self.width, self.height),
+		scroll:jam.Vector(0,0),
+		size:jam.Vector(self.width, self.height),
 		follow:null,
 	};
 

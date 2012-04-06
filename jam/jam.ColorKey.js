@@ -1,8 +1,8 @@
 // This module allows you to load an image into an animated Sprite and 
 // replace a certain RGB value with transparent. This is especially good
 // if taking the sprite from some online source. 
-jsGame.includeModule("Animation");
-jsGame.AnimatedSprite = jsGame.extend(jsGame.AnimatedSprite, function(self){
+jam.includeModule("Animation");
+jam.AnimatedSprite = jam.extend(jam.AnimatedSprite, function(self){
 
 	// This function loops through all the pixels and replaces the specific
 	// color with transparent. 
@@ -43,10 +43,10 @@ jsGame.AnimatedSprite = jsGame.extend(jsGame.AnimatedSprite, function(self){
 	};
 
 	// Use setImageColorKey instead of setImage to load your sprites
-	self.setImageColorKey = jsGame.extend(self.setImage, function(){
+	self.setImageColorKey = jam.extend(self.setImage, function(){
 		// We can't do it now, we have to wait until the image loads.
 		// So, extend the imageLoaded function
-		self.imageLoaded = jsGame.extend(self.imageLoaded, function(){
+		self.imageLoaded = jam.extend(self.imageLoaded, function(){
 			self.setTransparentColor();	
 		});
 	});

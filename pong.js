@@ -1,22 +1,22 @@
-jsGame.includeModule("ProtoTools");
-jsGame.includeModule("RectCollision");
-jsGame.includeModule("Debug");
+jam.includeModule("ProtoTools");
+jam.includeModule("RectCollision");
+jam.includeModule("Debug");
 
 
 window.onload = function(){
-	jsGame.preload("http://peach.blender.org/wp-content/uploads/big_big_buck_bunny.jpg");
-	jsGame.preload("http://apod.nasa.gov/apod/image/9712/orionfull_jcc_big.jpg");
-	jsGame.preload("http://www.surftravelcompany.com/big-wave-pics/big-wave.jpg");
-	jsGame.preload("http://myrentalpad.com/wp-content/uploads/2010/03/cant-have-anything-nice.gif");
-	jsGame.preload("http://peach.blender.org/wp-content/uploads/big_big_buck_bunny.jpg");
-	jsGame.showPreloader(document.body, initialize);
+	jam.preload("http://peach.blender.org/wp-content/uploads/big_big_buck_bunny.jpg");
+	jam.preload("http://apod.nasa.gov/apod/image/9712/orionfull_jcc_big.jpg");
+	jam.preload("http://www.surftravelcompany.com/big-wave-pics/big-wave.jpg");
+	jam.preload("http://myrentalpad.com/wp-content/uploads/2010/03/cant-have-anything-nice.gif");
+	jam.preload("http://peach.blender.org/wp-content/uploads/big_big_buck_bunny.jpg");
+	jam.showPreloader(document.body, initialize);
 }
 
 function initialize(){
-	var game = jsGame.Game(500, 300);
+	var game = jam.Game(500, 300);
 	game.fps = 40;
 
-	jsGame.Debug.showBoundingBoxes = true;
+	jam.Debug.showBoundingBoxes = true;
 	
 	// Dumb way to put a border around the game
 	game._canvas.style.border="1px solid black";
@@ -24,33 +24,33 @@ function initialize(){
 	// Score
 	var score = [0,0];
 
-	var scoreTxt = jsGame.Text(200, 50);
+	var scoreTxt = jam.Text(200, 50);
 	game.add(scoreTxt);
 	
 	// Create objects
-	var ball = jsGame.Sprite(300, 150);
+	var ball = jam.Sprite(300, 150);
 	ball.rectangleImage(20,20, "rgb(0,0,0)");
 	game.add(ball);
 
-	var player = jsGame.Sprite(2, 100);
+	var player = jam.Sprite(2, 100);
 	player.rectangleImage(20, 100, "rgb(0,0,0)");
 	game.add(player);
 
-	var ai = jsGame.Sprite(478, 100);
+	var ai = jam.Sprite(478, 100);
 	ai.rectangleImage(20, 100, "rgb(0,0,0)");
 	game.add(ai);
 
 	// Put player and AI in same collision group so the ball 
 	// can collide with either.
 
-	var paddles = jsGame.CollisionGroup();
+	var paddles = jam.CollisionGroup();
 	paddles.add(player);
 	paddles.add(ai);
 
 	// Extend object behaviors
 	ball.velocity.x = 100;
 	ball.velocity.y = 100;
-	ball.update = jsGame.extend(ball.update, function(){
+	ball.update = jam.extend(ball.update, function(){
 		// Bouncing
 		// Use the overlaps callback
 		ball.overlaps(paddles, function(me, other){
@@ -87,20 +87,20 @@ function initialize(){
 		}
 	});
 
-	player.update = jsGame.extend(player.update, function(elapsed){
+	player.update = jam.extend(player.update, function(elapsed){
 		// Reset velocity
 		player.velocity.y = 0;
 		// And then set it based on input
-		if( jsGame.Input.keyDown("UP") ){
+		if( jam.Input.keyDown("UP") ){
 			player.velocity.y = -250;
 		}
-		if( jsGame.Input.keyDown("DOWN") ){
+		if( jam.Input.keyDown("DOWN") ){
 			player.velocity.y = 250;
 		}
 		player.y = Math.min(Math.max(0, player.y), 300 - player.height);
 	});
 
-	ai.update = jsGame.extend(ai.update, function(elapsed){
+	ai.update = jam.extend(ai.update, function(elapsed){
 		// Always towards the ball if the ball is coming towards us
 		if(ball.x > 100){
 			if(ball.y + ball.height / 2 > ai.y + ai.height){
@@ -119,7 +119,7 @@ function initialize(){
 	// Score text
 	scoreTxt.font = "40pt calibri";
 	scoreTxt.color = "#000";
-	scoreTxt.update = jsGame.extend(scoreTxt.update, function(){
+	scoreTxt.update = jam.extend(scoreTxt.update, function(){
 		scoreTxt.text = score[0] + " - " + score[1];
 	});
 
