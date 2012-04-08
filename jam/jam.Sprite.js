@@ -24,16 +24,16 @@ jam.Sprite = function(x, y){
 		{
 			jam.load(url, function(obj){
 				self.image = obj;
-				self.width = self.image.width;
-				self.height = self.image.height;
+				self.width = self.image.naturalWidth;
+				self.height = self.image.naturalHeight;
 				self.imageLoaded();
 			});
 		}
 		else
 		{
 			self.image = jam.cache[url];
-			self.width = self.image.width;
-			self.height = self.image.height;
+			self.width = self.image.naturalWidth;
+			self.height = self.image.naturalHeight;
 			self.imageLoaded();			
 		}
 	}

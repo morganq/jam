@@ -1,6 +1,3 @@
-// jam modules should attach themselves to the jam object.
-// This will preserve a nice single namespace for everything jam related.
-
 jam = function(){
 	var _preloadCompletedObjects = 0;
 	var _preloadTotalObjects = 0;

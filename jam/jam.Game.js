@@ -21,7 +21,6 @@ jam.Game = function(width, height, parentElement){
 	self._canvas = document.createElement("canvas"); 
 	self._context = self._canvas.getContext("2d");
 	self._children = [];
-	self._bgColor = "rgb(255,255,255)";
 
 	// List of objects to be removed
 	self._remove = [];
@@ -36,6 +35,7 @@ jam.Game = function(width, height, parentElement){
 		size:jam.Vector(self.width, self.height),
 		follow:null,
 	};
+	self.bgColor = "rgb(255,255,255)";	
 
 	// If they didn't supply this argument, assume the doc body
 	// as the parent element for the canvas
@@ -79,16 +79,12 @@ jam.Game = function(width, height, parentElement){
 	// Called every frame. Clears the screen then calls render on each child.
 	self.render = function(){
 		var ctx = self._context;
-		ctx.fillStyle = self._bgColor;
+		ctx.fillStyle = self.bgColor;
 		ctx.fillRect(0,0,self.width,self.height);
 		for (var i = self._children.length-1; i >= 0; --i)
 		{
 			self._children[i].render(ctx, self.camera);
 		}
-	};
-
-	self.setBGColor = function(r,g,b){
-		self._bgColor = "rgb(" + r + "," + g + "," + b + ")";
 	};
 
 	self.add = function(sprite){

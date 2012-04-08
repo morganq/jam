@@ -19,7 +19,7 @@ var moves = [];
 var hadouken = [jam.Vector(0, 1), jam.Vector(0.7071, 0.7071), jam.Vector(1, 0)];
 
 // Inside update function
-if(jam.Input.joyJustchanged){ moves.push(jam.Input.joy); }
+if(jam.Input.joyJustChanged){ moves.push(jam.Input.joy); }
 
 var l = moves.length;
 if(	l > 2 && 
