@@ -13,6 +13,41 @@
 // attach them to things other than sprites (like collision groups
 // or something)
 
+
+/*	SAMPLE USAGE:
+
+** checking overlap between two objects **
+// inside an update function:
+if(player.overlaps(robot)){
+	game.remove(robot);
+};
+
+** checking overlap between two groups of objects **
+robots = jam.CollisionGroup();
+bullets = jam.CollisionGroup();
+robots.add(stuff);
+bullets.add(stuff);
+
+// inside update
+// the function defined here takes a single robot and a single bullet.
+jam.Collision.overlaps(robots, bullets, function(robot, bullet){
+	robot.health -= 3;
+	game.remove(bullet);
+	bullets.remove(bullet);
+});
+
+
+** collision response **
+platforms = jam.CollisionGroup();
+var plat = jam.Sprite(......)
+plat.immovable = true;
+platforms.add(plat);
+
+//inside update
+player.collide(platforms);
+
+*/
+
 jam.Collision = {};
 jam.Collision.overlaps = function(s1, s2, callback){
 	// Assume both are GROUPS of objects, and if they're not, make them
@@ -80,7 +115,7 @@ jam.Collision.collide = function(s1, s2){
 	}
 };
 
-// Yeah.
+// Called to collide a pair of sprites.
 jam.Collision.collideSingle = function(self, other){
 	if(!self.overlaps(other)){
 		return false;
@@ -141,7 +176,7 @@ jam.Collision.collideSingle = function(self, other){
 
 // Okay, now give sprites all this functionality
 jam.Sprite = jam.extend(jam.Sprite, function(self){
-	self.immovable = false;
+	self.immovable = false;	// Can this sprite be pushed around by collisions
 	
 	// Always supply self as the first argument and the other guy as the second
 	self.overlaps = function(other, callback) { return jam.Collision.overlaps(self, other, callback); }

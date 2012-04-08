@@ -17,7 +17,6 @@ window.onload = function(){
 jam.Game = function(width, height, parentElement){
 	var self = {};
 
-// Private
 	self._canvas = document.createElement("canvas"); 
 	self._context = self._canvas.getContext("2d");
 	self._children = [];
@@ -25,7 +24,7 @@ jam.Game = function(width, height, parentElement){
 	// List of objects to be removed
 	self._remove = [];
 
-// Public
+
 	self.width = width;
 	self.height = height;
 	self.fps = 80;		// Frequency
@@ -72,7 +71,7 @@ jam.Game = function(width, height, parentElement){
 		// Call update on each child and pass it the elapsed time
 		for (var i = self._children.length-1; i >= 0; --i)
 		{
-			self._children[i].update(1.0/self.fps);
+			self._children[i].update(self.elapsed);
 		}
 	};
 
