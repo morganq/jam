@@ -9,9 +9,10 @@ window.onload = function(){
 	// First thing is to preload the assets. This isn't strictly necessary,
 	// but doing so will ensure that users won't see assets pop in during
 	// gameplay.
-	jam.preload("data/paddle_player.png");
-	jam.preload("data/paddle_ai.png");
-	jam.preload("data/ball.png");
+	jam.preload("pong_data/background.png");
+	jam.preload("pong_data/paddle_player.png");
+	jam.preload("pong_data/paddle_ai.png");
+	jam.preload("pong_data/ball.png");
 	
 	// showPreloader makes a nice loading bar in the middle of whatever 
 	// DOM element you're going to have the game fit into. When the preloader
@@ -38,16 +39,16 @@ function initialize(){
 	// Create a sprite representing the ball
 	var ball = jam.Sprite(300, 150);
 	// Load the ball image (which we preloaded) into the sprite.
-	ball.setImage("data/ball.png");
+	ball.setImage("pong_data/ball.png");
 	// Add the ball so that the game knows to draw and update it.
 	game.add(ball);
 	
 	var player = jam.Sprite(10, 100);
-	player.setImage("data/paddle_player.png");
+	player.setImage("pong_data/paddle_player.png");
 	game.add(player);
 
 	var ai = jam.Sprite(464, 100);
-	ai.setImage("data/paddle_ai.png");
+	ai.setImage("pong_data/paddle_ai.png");
 	game.add(ai);
 
 	// Put player and AI in same collision group so the ball 
@@ -166,7 +167,7 @@ function initialize(){
 	});
 
 	bg = jam.Sprite(0,0);
-	bg.setImage("data/background.png");
+	bg.setImage("pong_data/background.png");
 	bg.setLayer(-1);
 	game.add(bg);
 	

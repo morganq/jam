@@ -18,6 +18,13 @@ jam.Game = function(width, height, parentElement){
 	var self = {};
 
 	self._canvas = document.createElement("canvas"); 
+	self._canvas.style.position = "relative";
+	onresize = function(){
+		self._canvas.style.left = (parentElement.clientWidth / 2 - width / 2) +"px";
+		self._canvas.style.top = (parentElement.clientHeight / 2 - height / 2) + "px";
+	}
+	onresize();
+	parentElement.onresize = onresize;
 	self._context = self._canvas.getContext("2d");
 	self._children = [];
 

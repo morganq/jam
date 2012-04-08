@@ -10,6 +10,8 @@ jam.Sprite = function(x, y){
 	self.y = y;
 	self.width = 0;
 	self.height = 0;
+	self.angle = 0;
+	self.alpha = 1.0;
 	
 	self.image = null;
 	self.visible = true; // The sprite can be hidden by setting this to false
@@ -49,9 +51,18 @@ jam.Sprite = function(x, y){
 	self.render = function(context, camera)
 	{
 		if(self.image !== null && self.visible){
-			context.drawImage(self.image,
-				self.x - camera.scroll.x * self.parallax.x,
-				self.y - camera.scroll.y * self.parallax.y);
+			var tx = self.x - camera.scroll.x * self.parallax.x + self.width/2;
+			var ty = self.y - camera.scroll.y * self.parallax.y + self.height/2;
+			var a = self.angle * Math.PI / 180;
+			context.translate(tx, ty);
+			if(self.angle != 0){ context.rotate(a); }
+			if(self.alpha != 1.0){ context.globalAlpha = self.alpha; }
+			
+			context.drawImage(self.image,-self.width/2,-self.height/2);
+			
+			if(self.angle != 0){ context.rotate(-a); }
+			if(self.alpha != 1.0){ context.globalAlpha = 1.0; }
+			context.translate(-tx, -ty);
 		}
 	}
 	
