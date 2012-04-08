@@ -22,6 +22,7 @@ if(player.overlaps(robot)){
 	game.remove(robot);
 };
 
+
 ** checking overlap between two groups of objects **
 robots = jam.CollisionGroup();
 bullets = jam.CollisionGroup();

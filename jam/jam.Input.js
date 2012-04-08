@@ -29,9 +29,29 @@ if(jam.Input.keyDown(keyBindings.attack)) { player.playAnimation(attacking); }
 jam.Input = function(){
 	var self = {}
 	
+	// Hook into the js events for key pressing
+	document.onkeydown = function(e){
+		var code = ('which' in e) ? e.which : e.keyCode;
+		if(self._keys[self._getName(code)] === false || self._keys[self._getName(code)] === undefined){
+			self._keys[self._getName(code)] = true;
+			self._justPressedKeys.push(self._getName(code));
+		}
+	};
+	document.onkeyup = function(e){
+		var code = ('which' in e) ? e.which : e.keyCode;
+		if(self._keys[self._getName(code)] === true){
+			self._keys[self._getName(code)] = false;
+			self._justReleasedKeys.push(self._getName(code));
+		}
+	};	
+	
+	self._justPressedKeys = [];
+	self._justReleasedKeys = [];
+	self._keys = {};
+	
 	// Based on a keycode, get a string name for the key.
 	// Special cases for arrow keys
-	getName = function(code){
+	self._getName = function(code){
 		if(code >= 65 && code <= 90) { return String.fromCharCode(code); }
 		else if(code >= 97 && code <= 122){
 			return String.fromCharCode(code).toUpperCase();
@@ -45,33 +65,14 @@ jam.Input = function(){
 			default: return "UNKNOWN";
 		}
 	};
-	
-	var justPressedKeys = [];
-	var justReleasedKeys = [];
-	var keys = {};
-	
-	document.onkeydown = function(e){
-		var code = ('which' in e) ? e.which : e.keyCode;
-		if(keys[getName(code)] === false || keys[getName(code)] === undefined){
-			keys[getName(code)] = true;
-			justPressedKeys.push(getName(code));
-		}
-	};
-	document.onkeyup = function(e){
-		var code = ('which' in e) ? e.which : e.keyCode;
-		if(keys[getName(code)] === true){
-			keys[getName(code)] = false;
-			justReleasedKeys.push(getName(code));
-		}
-	};
 
-	var _update = function()
+	self._update = function()
 	{
-		justPressedKeys = [];
-		justReleasedKeys = [];
+		self._justPressedKeys = [];
+		self._justReleasedKeys = [];
 	}
 
-	// Gotta add our update at the end of the game update. We need
+	// Now add our update at the end of the game update. We need
 	// an update function to make sure the justPressed and justReleased
 	// lists are updated each frame.
 	jam.Game = jam.extend(jam.Game, function(cls){
@@ -80,29 +81,21 @@ jam.Input = function(){
 		});
 		return cls;
 	}, true, true);
-
-	self = {
-		// Returns true if the key is currently being held down
-		keyDown : function(name){
-			return keys[name];
-		},
-		
-		// Returns true if the key was pressed this frame
-		justPressed : function(name){
-			return justPressedKeys.indexOf(name) !== -1;
-		},
-		
-		// Returns true if the key was released this frame
-		justReleased : function(name){
-			return justReleasedKeys.indexOf(name) !== -1;
-		},
-		
-		// Making this accessible so that it can be extended later.
-		_update : _update
+	
+	
+	self.justPressed = function(name){
+		return self._justPressedKeys.indexOf(name) !== -1;
 	};
 	
+	self.justReleased = function(name){
+		return self._justReleasedKeys.indexOf(name) !== -1;
+	};
+	
+	self.keyDown = function(name){
+		return self._keys[name];
+	};	
+	
 	return self;
-
 
 }();
 
