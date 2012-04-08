@@ -15,10 +15,20 @@ jam.Debug.debugRenderExtension = function(self){
 		self.render = jam.extend(self.render, function(context, camera) {
 			if(!jam.Debug.showBoundingBoxes) { return; }
 			context.lineWidth = 1;
-			context.strokeStyle = "rgba(255,0,0,0.5)";
+			context.strokeStyle = "rgba(255,0,0,0.6)";
 			context.strokeRect(	Math.floor(self.x - camera.scroll.x)+0.5,
 								Math.floor(self.y - camera.scroll.y)+0.5,
 								self.width, self.height);
+			
+			if( self._collisionOffsetX || self._collisionOffsetY ||
+				self._collisionOffsetWidth || self._collisionOffsetHeight)
+			{
+				context.strokeStyle = "rgba(0,255,255,0.5)";
+				context.strokeRect(	Math.floor(self.x - camera.scroll.x + self._collisionOffsetX)+0.5,
+									Math.floor(self.y - camera.scroll.y + self._collisionOffsetY)+0.5,
+									self.width + self._collisionOffsetWidth,
+									self.height + self._collisionOffsetHeight);
+			}
 		});
 		
 		return self;

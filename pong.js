@@ -32,7 +32,7 @@ function initialize(){
 	var score = [0,0];
 
 	// The text object which will display the scores
-	var scoreTxt = jam.Text(200, 50);
+	var scoreTxt = jam.Text(203, 50);
 	game.add(scoreTxt);
 	
 	// Create a sprite representing the ball
@@ -41,12 +41,12 @@ function initialize(){
 	ball.setImage("data/ball.png");
 	// Add the ball so that the game knows to draw and update it.
 	game.add(ball);
-
-	var player = jam.Sprite(1, 100);
+	
+	var player = jam.Sprite(10, 100);
 	player.setImage("data/paddle_player.png");
 	game.add(player);
 
-	var ai = jam.Sprite(472, 100);
+	var ai = jam.Sprite(464, 100);
 	ai.setImage("data/paddle_ai.png");
 	game.add(ai);
 
@@ -165,6 +165,11 @@ function initialize(){
 		scoreTxt.text = score[0] + " - " + score[1];
 	});
 
+	bg = jam.Sprite(0,0);
+	bg.setImage("data/background.png");
+	bg.setLayer(-1);
+	game.add(bg);
+	
 	// Finally, start the game. 
 	game.run();
 }

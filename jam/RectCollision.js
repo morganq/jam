@@ -76,11 +76,19 @@ jam.Collision.overlaps = function(s1, s2, callback){
 	{
 		for(var j = 0, jMax = g2.length; j < jMax; ++j)
 		{
+			var x1 = g1[i].x + g1[i]._collisionOffsetX;
+			var y1 = g1[i].y + g1[i]._collisionOffsetY;
+			var w1 = g1[i].width + g1[i]._collisionOffsetWidth;
+			var h1 = g1[i].height + g1[i]._collisionOffsetHeight;
+			
+			var x2 = g2[j].x + g2[j]._collisionOffsetX;
+			var y2 = g2[j].y + g2[j]._collisionOffsetY;
+			var w2 = g2[j].width + g2[j]._collisionOffsetWidth;
+			var h2 = g2[j].height + g2[j]._collisionOffsetHeight;		
+		
 			// Detect overlap (maybe this should be overlapSingle)
-			if ( g1[i].x + g1[i].width > g2[j].x &&
-					g1[i].y + g1[i].height > g2[j].y &&
-					g1[i].x <= g2[j].x + g2[j].width &&
-					g1[i].y <= g2[j].y + g2[j].height )
+			if ( x1 + w1 > x2 && y1 + h1 > y2 &&
+				 x1 <= x2 + w2 && y1 <= y2 + h2 )
 			{
 				if(callback !== undefined){callback(g1[i], g2[j]);}
 				returnValue = true;
@@ -129,11 +137,21 @@ jam.Collision.collideSingle = function(self, other){
 	else if(other.immovable) { staticCo1 = 1.0; staticCo2 = 0.0;}
 	else { staticCo1 = 0.5; staticCo2 = 0.5; }
 	
+	var x1 = self.x + self._collisionOffsetX;
+	var y1 = self.y + self._collisionOffsetY;
+	var w1 = self.width + self._collisionOffsetWidth;
+	var h1 = self.height + self._collisionOffsetHeight;
+	
+	var x2 = other.x + other._collisionOffsetX;
+	var y2 = other.y + other._collisionOffsetY;
+	var w2 = other.width + other._collisionOffsetWidth;
+	var h2 = other.height + other._collisionOffsetHeight;	
+	
 	// Find the side with minimum penetration
-	var penLeft = -(self.x + self.width - other.x);
-	var penRight = -(self.x - (other.x + other.width));
-	var penTop = -(self.y + self.height - other.y);
-	var penBottom = -(self.y - (other.y + other.height));
+	var penLeft = -(x1 + w1 - x2);
+	var penRight = -(x1 - (x2 + w2));
+	var penTop = -(y1 + h1 - y2);
+	var penBottom = -(y1 - (y2 + h2));
 	
 	minHorizSep = (penRight < -penLeft ? penRight : penLeft);
 	minVertSep = (penBottom < -penTop ? penBottom : penTop);
@@ -178,6 +196,10 @@ jam.Collision.collideSingle = function(self, other){
 // Okay, now give sprites all this functionality
 jam.Sprite = jam.extend(jam.Sprite, function(self){
 	self.immovable = false;	// Can this sprite be pushed around by collisions
+	self._collisionOffsetX = 0;
+	self._collisionOffsetY = 0;
+	self._collisionOffsetWidth = 0;
+	self._collisionOffsetHeight = 0;
 	
 	// Always supply self as the first argument and the other guy as the second
 	self.overlaps = function(other, callback) { return jam.Collision.overlaps(self, other, callback); }
@@ -196,6 +218,13 @@ jam.Sprite = jam.extend(jam.Sprite, function(self){
 		self.touchingLeft = false;
 		self.touchingRight = false;
 	}, self.update);
+	
+	self.setCollisionRect = function(xo, yo, w, h){
+		self._collisionOffsetX = xo;
+		self._collisionOffsetY = yo;
+		self._collisionOffsetWidth = w - self.width;
+		self._collisionOffsetHeight = h - self.height;
+	}
 	
 	return self;
 }, true, true);

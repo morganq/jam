@@ -2,6 +2,10 @@
 // There is no collision detection, but it has position, velocity, acceleration
 jam.Sprite = function(x, y){
 	var self = {};
+	
+	self._layer = 0;
+	self._game = null;
+	
 	self.x = x;
 	self.y = y;
 	self.width = 0;
@@ -52,8 +56,7 @@ jam.Sprite = function(x, y){
 	}
 	
 	// Handle simple physics every tick
-	self.update = function(elapsed)
-	{
+	self.update = function(elapsed){
 		// This vector math stuff sucks because there's no such thing as
 		// operator overloading
 
@@ -64,6 +67,13 @@ jam.Sprite = function(x, y){
 		// Add to position based on velocity
 		self.x += self.velocity.x * elapsed;
 		self.y += self.velocity.y * elapsed;
+	}
+	
+	self.setLayer = function(layer){
+		self._layer = layer;
+		if(self._game){
+			self._game.sortSprites();
+		}
 	}
 	
 	return self;

@@ -3,9 +3,9 @@ jam.Meta = {};
 // Adds a function call to the end of an existing function
 // -fOld = the function to call first (and return the value of)
 // -fNew = the function to call second
-// -returnSecond = optional boolean, return the second func result instead?
-// -psasObject = optional boolean, pass the return value of fOld as first argument
-// of fNew? Useful to extend a class constructor!!
+// -returnSecond = optional boolean, return the second func result instead
+// -passObject = optional boolean, pass the return value of fOld as first argument
+// of fNew. Useful to extend a class constructor!!
 jam.Meta.extend = function(fOld, fAdd, returnSecond, passObject)
 {
 	fNew = function(){

@@ -88,18 +88,25 @@ jam.Game = function(width, height, parentElement){
 
 	self.add = function(sprite){
 		self._children.push(sprite);
+		sprite._game = self;
+		self.sortSprites();
 	};
 
 	self.remove = function(sprite){
 		if(self._remove.indexOf(sprite) === -1)
 		{
 			self._remove.push(sprite);
+			sprite._game = null;
 		}
 	};
 
 	self.run = function(){
 		self._tick();
 	};
+	
+	self.sortSprites = function(){
+		self._children.sort(function(a,b){ return b._layer - a._layer; });
+	}
 
 	return self;
 };
