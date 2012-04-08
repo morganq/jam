@@ -79,7 +79,7 @@ jam = function(){
 		document.write("<script language='javascript' src='" + name + "?" + nocache + "'></script>");
 		lib.modules.push(name);
 	}
-	lib.includeModule = function(name){ lib.include("jam/jam."+name+".js"); }
+	lib.includeModule = function(name){ lib.include("jam/"+name+".js"); }
 	
 	// Log is viewable by checking this object or through some debug implementation
 	// in a debug module
