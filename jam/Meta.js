@@ -20,6 +20,18 @@ jam.Meta.extend = function(fOld, fAdd, returnSecond, passObject)
 		var returnValue2 = fAdd.apply(null, passObject ? args : arguments);
 		return (returnSecond === true) ? returnValue2 : returnValue1;
 	};
+	
+	// If this is a class constructor then it may have static vars, and this will
+	// copy them over.
+	for (var key in fOld){
+		fNew[key] = fOld[key];
+	}
+	for (var key in fAdd){
+		fNew[key] = fAdd[key];
+	}
+	fNew.extensions = fAdd.extensions ? fAdd.extensions + 1 : 1;
+	fNew.flatCode = (fOld.flatCode ? fOld.flatCode : fOld.toString()) +
+					"\n\n" + (fAdd.flatCode ? fAdd.flatCode : fAdd.toString());
 	return fNew;
 }
 
@@ -29,9 +41,7 @@ jam.Meta.mixin = function(cOld, cMix)
 {
 	cNew = function(){
 		self = cOld.apply(null, arguments);
-		for (var key in cMix){
-			self[key] = cMix[key];
-		}
+
 
 		return self;
 	}

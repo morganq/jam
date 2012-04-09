@@ -212,7 +212,7 @@ jam.Sprite = jam.extend(jam.Sprite, function(self){
 	self.touchingRight = false;
 	
 	// Then get reset to false again
-	self.update = jam.extend(function(){
+	self.update = jam.extend(function(elapsed){
 		self.touchingTop = false;
 		self.touchingBottom = false;
 		self.touchingLeft = false;

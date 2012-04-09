@@ -7,6 +7,8 @@ jam = function(){
 	lib.modules = [];
 	lib.cache = {};
 	lib.loaded = false;
+	
+	// Loads and caches image files or sound files.
 	lib.load = function(url, onload){
 		var obj;
 		if(url.match(/\.(jpeg|jpg|png|gif)(\?.*)?$/)){
@@ -24,6 +26,7 @@ jam = function(){
 		return obj;
 	}
 	
+	// Preload just calls load and counts the number of currently loading objects
 	lib.preload = function(url){
 		lib.log("preloading: " + url);
 		_preloadTotalObjects++;	
@@ -33,6 +36,8 @@ jam = function(){
 			});
 	}
 	
+	// Draws the loading bar on the canvas object or removes it if 
+	// everything is done loading
 	var _showPreloader = function(context, callback)
 	{
 		if(_preloadCompletedObjects < _preloadTotalObjects)
@@ -52,6 +57,7 @@ jam = function(){
 		}
 	}
 	
+	// Makes a canvas filling the parent element
 	lib.showPreloader = function(element, callback)
 	{
 		var _canvas = document.createElement("canvas"); 
@@ -64,6 +70,7 @@ jam = function(){
 		_showPreloader(_context, callback);
 	}
 	
+	// Includes a file by making a <script> tag
 	lib.include = function(name){
 		// Could be pretty bad to include a file multiple times
 		if(lib.modules.indexOf(name) !== -1)
@@ -86,6 +93,7 @@ jam = function(){
 	lib.logMessages = [];
 	lib.log = function(text){
 		lib.logMessages.push({"time":(new Date()).getTime() - startTime, "message":text});
+		console.log("[" + (((new Date()).getTime() - startTime)/1000).toFixed(3) + "] " + text);
 	}
 	return lib;
 }();

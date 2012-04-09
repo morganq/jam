@@ -31,17 +31,12 @@ jam.Animation.Strip = function(frames, frameWidth, frameHeight, rate, offsetX, o
 }
 
 jam.AnimatedSprite = jam.extend(jam.Sprite, function(self){
-	// "static" constants so that we don't have to remember that
-	// 0 = left and 1 = right. These control if the sprite is flipped
-	// horizontally or not.
-	jam.Sprite.LEFT = 0;
-	jam.Sprite.RIGHT = 1;		
-	
-	self.facing = jam.Sprite.RIGHT;
+
 	self.animation = null;
 	self.lastAnimation = null;
 	self.frame = null;
 	self.animationFrame = 0;
+	self._force = false;
 
 	// Similar to Sprite's setImage, but we need to care about frameWidth and
 	// frameHeight
@@ -67,9 +62,10 @@ jam.AnimatedSprite = jam.extend(jam.Sprite, function(self){
 	};
 
 	// Simply sets the animation to whatever you pass it.
-	self.playAnimation = function(animation) { 
+	self.playAnimation = function(animation, force) { 
 		self.animation = animation;
-		if(self.frame === null){
+		if(force) { self._force = true; }
+		if(!self.frame || force){
 			self.frame = self.animation.frames[0];
 			self.animationFrame = 0;
 		}
@@ -95,9 +91,10 @@ jam.AnimatedSprite = jam.extend(jam.Sprite, function(self){
 			// changes. It's common for people to make the same playAnimation
 			// call every tick, so make sure we only reset stuff if it's a new
 			// anim.
-			if(self.animation !== self.lastAnimation){
+			if(self.animation !== self.lastAnimation || self._force){
 				self.animationFrame = 0;
 				self.frame = self.animation.frames[0];
+				self._force = false;
 			}
 			self.lastAnimation = self.animation;
 		}
@@ -107,28 +104,16 @@ jam.AnimatedSprite = jam.extend(jam.Sprite, function(self){
 	// of the animation object. Flips horizontally if needed
 	self.render = function(context, camera)
 	{
-		// Horrible automatic blending if we have non-integer values
-		var _x = Math.floor(self.x - camera.scroll.x * self.parallax.x);
-		var _y = Math.floor(self.y - camera.scroll.y * self.parallax.y);
-
 		if(self.image !== null && self.visible){
-			if(self.animation === null){
-				var curFrame = { x:0, y:0, w:self.width, h:self.height };
+			var curFrame = null;
+			if(self.frame === null || self.frame === undefined){
+				curFrame = { x:0, y:0, w:self.width, h:self.height };
 			} else {
-				var curFrame = self.frame;
+				curFrame = self.frame;
 			}
-
-			if(self.facing == jam.Sprite.RIGHT){
-				context.setTransform(1,0,0,1,0,0);
-				context.drawImage(self.image, curFrame.x, curFrame.y, curFrame.w, curFrame.h,
-									 _x, _y, curFrame.w, curFrame.h);
-			}
-			else{
-				context.setTransform(-1,0,0,1,_x*2,0);
-				context.drawImage(self.image, curFrame.x, curFrame.y, curFrame.w, curFrame.h,
-									 _x - curFrame.w, _y, curFrame.w, curFrame.h);
-			}
-			context.setTransform(1,0,0,1,0,0);
+			
+			self._renderHelper(context, camera, self.image,
+							    curFrame.w, curFrame.h, curFrame.x, curFrame.y, curFrame.w, curFrame.h);
 		}
 	};			
 	return self;

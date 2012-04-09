@@ -80,7 +80,11 @@ function initialize(){
 		// Clamp the y position so it doesn't go out of bounds.
 		player.y = Math.min(Math.max(0, player.y), 300 - player.height);
 	});
-
+	
+	// If you want to take a look at what code you end up with after all the 
+	// extending of behavior, just inspect the flatCode property of function.
+	jam.log(player.update.flatCode);
+	// The console will show each function that gets called when the update occurs.
 
 	// Make the ball start moving at 100 pixels/sec to the right
 	ball.velocity.x = 100;

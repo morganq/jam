@@ -19,17 +19,19 @@ jam.Game = function(width, height, parentElement){
 
 	self._canvas = document.createElement("canvas"); 
 	self._canvas.style.position = "relative";
-	onresize = function(){
-		self._canvas.style.left = (parentElement.clientWidth / 2 - width / 2) +"px";
-		self._canvas.style.top = (parentElement.clientHeight / 2 - height / 2) + "px";
-	}
-	onresize();
-	parentElement.onresize = onresize;
 	self._context = self._canvas.getContext("2d");
 	self._children = [];
 
 	// List of objects to be removed
 	self._remove = [];
+	
+	// Always keep the canvas in the middle of the parent element
+	onresize = function(){
+		self._canvas.style.left = (parentElement.clientWidth / 2 - width / 2) +"px";
+		self._canvas.style.top = (parentElement.clientHeight / 2 - height / 2) + "px";
+	}
+	onresize();
+	parentElement.onresize = onresize;	
 
 
 	self.width = width;
@@ -96,7 +98,7 @@ jam.Game = function(width, height, parentElement){
 	self.add = function(sprite){
 		self._children.push(sprite);
 		sprite._game = self;
-		self.sortSprites();
+		self.sortSprites();	// Sort to figure out layering
 	};
 
 	self.remove = function(sprite){

@@ -1,10 +1,13 @@
+
 // A Sprite is an object with an image and very simple physics.
 // There is no collision detection, but it has position, velocity, acceleration
 jam.Sprite = function(x, y){
-	var self = {};
+	var self = {};	
 	
 	self._layer = 0;
 	self._game = null;
+	
+	self.facing = jam.Sprite.RIGHT;	
 	
 	self.x = x;
 	self.y = y;
@@ -51,19 +54,26 @@ jam.Sprite = function(x, y){
 	self.render = function(context, camera)
 	{
 		if(self.image !== null && self.visible){
-			var tx = self.x - camera.scroll.x * self.parallax.x + self.width/2;
-			var ty = self.y - camera.scroll.y * self.parallax.y + self.height/2;
-			var a = self.angle * Math.PI / 180;
-			context.translate(tx, ty);
-			if(self.angle != 0){ context.rotate(a); }
-			if(self.alpha != 1.0){ context.globalAlpha = self.alpha; }
-			
-			context.drawImage(self.image,-self.width/2,-self.height/2);
-			
-			if(self.angle != 0){ context.rotate(-a); }
-			if(self.alpha != 1.0){ context.globalAlpha = 1.0; }
-			context.translate(-tx, -ty);
+			self._renderHelper(context, camera, self.image,
+							   self.width, self.height, 0, 0, self.width, self.height);
 		}
+	}
+	
+	self._renderHelper = function(context, camera, image, w, h, sx, sy, sw, sh){
+		// Avoid horrible automatic blending if we have non-integer values
+		var tx = Math.floor(self.x - camera.scroll.x * self.parallax.x + self.width/2);
+		var ty = Math.floor(self.y - camera.scroll.y * self.parallax.y + self.height/2);
+		context.save();
+		
+		// Set up the context transform and alpha before drawing
+		context.translate(tx, ty);
+		if(self.angle != 0){ context.rotate(self.angle * Math.PI / 180); }
+		if(self.alpha != 1.0){ context.globalAlpha = self.alpha; }
+		if(self.facing == jam.Sprite.LEFT){ context.scale(-1, 1); }
+		
+		context.drawImage(self.image, sx, sy, sw, sh, -self.width/2,-self.height/2, w, h);
+		
+		context.restore();
 	}
 	
 	// Handle simple physics every tick
@@ -80,6 +90,7 @@ jam.Sprite = function(x, y){
 		self.y += self.velocity.y * elapsed;
 	}
 	
+	// Sets the layer value then tells the game to sort
 	self.setLayer = function(layer){
 		self._layer = layer;
 		if(self._game){
@@ -89,3 +100,10 @@ jam.Sprite = function(x, y){
 	
 	return self;
 };
+
+// "static" constants so that we don't have to remember that
+// 0 = left and 1 = right. These control if the sprite is flipped
+// horizontally or not.
+
+jam.Sprite.LEFT = 0;
+jam.Sprite.RIGHT = 1;
