@@ -25,19 +25,22 @@ jam.Game = function(width, height, parentElement){
 	// List of objects to be removed
 	self._remove = [];
 	
+	
+	
 	// Always keep the canvas in the middle of the parent element
 	onresize = function(){
 		self._canvas.style.left = (parentElement.clientWidth / 2 - width / 2) +"px";
 		self._canvas.style.top = (parentElement.clientHeight / 2 - height / 2) + "px";
 	}
 	onresize();
-	parentElement.onresize = onresize;	
+	parentElement.onresize = onresize;
 
 
 	self.width = width;
 	self.height = height;
 	self.fps = 80;		// Frequency
 	self.elapsed = 0; 	// Period
+	self.time = 0;
 	self.camera = {
 		scroll:jam.Vector(0,0),
 		size:jam.Vector(self.width, self.height),
@@ -69,7 +72,8 @@ jam.Game = function(width, height, parentElement){
 		self._remove = [];
 
 		self.elapsed = 1.0/self.fps;
-
+		self.time += self.elapsed;
+		
 		// Simplest possible follow code
 		if(self.camera.follow !== null)
 		{
