@@ -219,7 +219,7 @@ jam.Sprite = jam.extend(jam.Sprite, function(self){
 		self.touchingRight = false;
 	}, self.update);
 	
-	self.setCollisionRect = function(xo, yo, w, h){
+	self.setCollisionOffsets = function(xo, yo, w, h){
 		self._collisionOffsetX = xo;
 		self._collisionOffsetY = yo;
 		self._collisionOffsetWidth = w - self.width;
