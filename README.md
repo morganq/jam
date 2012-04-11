@@ -8,7 +8,7 @@ A canvas / javascript game engine for rapid prototyping of 2d games.
 
 Example games
 -------------
-The root directory has a few example games. Pong is the simplest one, and it is reasonably commented.
+The root directory has one example game, a pong clone. The code is commented pretty heavily.
 Open pong.html on your browser to try it out, and view pong.js to see how it works.
 
 Modules
