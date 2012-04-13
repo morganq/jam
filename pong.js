@@ -1,34 +1,16 @@
-// Include the debug module so that we can show bounding boxes if we like
-jam.includeModule("Debug");
-
 // RectCollision gives us functionality for detecting and resolving collisions
 // between sprites, and treats them each as a rectangle.
 jam.includeModule("RectCollision");
 
 window.onload = function(){
-	// First thing is to preload the assets. This isn't strictly necessary,
-	// but doing so will ensure that users won't see assets pop in during
-	// gameplay.
-	jam.preload("pong_data/background.png");
-	jam.preload("pong_data/paddle_player.png");
-	jam.preload("pong_data/paddle_ai.png");
-	jam.preload("pong_data/ball.png");
-	
-	// showPreloader makes a nice loading bar in the middle of whatever 
-	// DOM element you're going to have the game fit into. When the preloader
-	// is finished it will call initialize()
-	jam.showPreloader(document.body, initialize);
+	initialize();
 }
 
 function initialize(){
 	// Initialize the game at 500 x 300 pixel resolution. The canvas
 	// gets added to the page as a child of document.body
 	var game = jam.Game(500, 300, document.body);
-	game.fps = 40;
-	game.bgColor = "rgb(0,0,0)";
-
-	jam.Debug.showBoundingBoxes = false;
-
+	
 	// Score [player score, ai score]
 	var score = [0,0];
 
@@ -43,11 +25,11 @@ function initialize(){
 	// Add the ball so that the game knows to draw and update it.
 	game.add(ball);
 	
-	var player = jam.Sprite(10, 100);
+	var player = jam.Sprite(10, 100);	// Player's paddle
 	player.setImage("pong_data/paddle_player.png");
 	game.add(player);
 
-	var ai = jam.Sprite(464, 100);
+	var ai = jam.Sprite(464, 100);	// AI's Paddle
 	ai.setImage("pong_data/paddle_ai.png");
 	game.add(ai);
 
@@ -85,11 +67,6 @@ function initialize(){
 	// extending of behavior, just inspect the flatCode property of function.
 	jam.log(player.update.flatCode);
 	// The console will show each function that gets called when the update occurs.
-
-	// Make the ball start moving at 100 pixels/sec to the right
-	ball.velocity.x = 100;
-	// And down.
-	ball.velocity.y = 100;
 	
 	ball.update = jam.extend(ball.update, function(elapsed){
 		// First of all, the ball needs to bounce off the paddles.
@@ -121,25 +98,26 @@ function initialize(){
 			ball.velocity.y = -ball.velocity.y
 		}
 		
-		// Scoring behavior
-		// Reset will put the ball back in the middle with random direction.
-		var reset = function(){
-			ball.x = 240;
-			ball.y = 140;
-			ball.velocity.x = Math.random() > 0.5 ? 200 : -200;
-			ball.velocity.y = Math.random() * 400 - 200;
-		}
 		// Score on the left side
 		if(ball.x <= 0){
-			reset();
+			ball.reset();
 			score[1]++;
 		}
 		// Score on the right side
 		if(ball.x + ball.width >= 500){
-			reset();
+			ball.reset();
 			score[0]++;
 		}
 	});
+	// Scoring behavior
+	// Reset will put the ball back in the middle with random direction.
+	ball.reset = function(){
+		ball.x = 240;
+		ball.y = 140;
+		ball.velocity.x = Math.random() > 0.5 ? 200 : -200;
+		ball.velocity.y = Math.random() * 400 - 200;
+	}	
+	ball.reset();
 
 
 	// Very simple AI, just tries to hit the ball by moving towards it
@@ -170,7 +148,7 @@ function initialize(){
 		scoreTxt.text = score[0] + " - " + score[1];
 	});
 
-	bg = jam.Sprite(0,0);
+	bg = jam.Sprite(0,0);	// Background image.
 	bg.setImage("pong_data/background.png");
 	bg.setLayer(-1);
 	game.add(bg);
