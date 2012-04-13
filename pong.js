@@ -6,7 +6,7 @@ window.onload = function(){
 	initialize();
 }
 
-function initialize(){
+initialize = function(){
 	// Initialize the game at 500 x 300 pixel resolution. The canvas
 	// gets added to the page as a child of document.body
 	var game = jam.Game(500, 300, document.body);

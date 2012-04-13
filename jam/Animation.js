@@ -46,16 +46,16 @@ jam.AnimatedSprite = jam.extend(jam.Sprite, function(self){
 		{
 			jam.load(url, function(obj){
 				self.image = jam.cache[url];
-				self.width = (frameWidth === undefined) ? self.image.width : frameWidth;
-				self.height = (frameHeight === undefined) ?  self.image.height : frameHeight;
+				self.width = (frameWidth === undefined) ? self.image.naturalWidth : frameWidth;
+				self.height = (frameHeight === undefined) ?  self.image.naturalHeight : frameHeight;
 				self.imageLoaded();
 			});
 		}
 		else
 		{
 			self.image = jam.cache[url];
-			self.width = (frameWidth === undefined) ? self.image.width : frameWidth;
-			self.height = (frameHeight === undefined) ?  self.image.height : frameHeight;
+			self.width = (frameWidth === undefined) ? self.image.naturalWidth : frameWidth;
+			self.height = (frameHeight === undefined) ?  self.image.naturalHeight : frameHeight;
 			self.imageLoaded();			
 		}		
 		

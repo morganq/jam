@@ -69,7 +69,7 @@ jam.Sprite = function(x, y){
 		context.translate(tx, ty);
 		if(self.angle != 0){ context.rotate(self.angle * Math.PI / 180); }
 		if(self.alpha != 1.0){ context.globalAlpha = self.alpha; }
-		if(self.facing == jam.Sprite.LEFT){ context.scale(-1, 1); }
+		if(self.facing == jam.Sprite.LEFT){ context.scale(-1, 1);}
 		
 		context.drawImage(self.image, sx, sy, sw, sh, -self.width/2,-self.height/2, w, h);
 		

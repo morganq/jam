@@ -3,7 +3,8 @@
 // Useful for platformers or RPGs, and other things probably
 
 jam.LevelMap = function(tilesize, w, h, image){
-	var self = {};
+	var self = jam.CollisionGroup();
+	self._layer = 0;
 	self.tiles = [];
 	self.tilesize = tilesize;
 
@@ -113,6 +114,10 @@ jam.LevelMap.Tile = function(x, y, imageIndex, collide){
 	self.y = y * 32;
 	self.width = 32;
 	self.height = 32;
+	self._collisionOffsetX = 0;
+	self._collisionOffsetY = 0;
+	self._collisionOffsetWidth = 0;
+	self._collisionOffsetHeight = 0;
 	self.velocity = {x:0, y:0};
 	self.collides = (collide === undefined) ? true : collide;
 	self.overlaps = function(other, callback) { return jam.Collision.overlaps(self, other, callback); }
@@ -133,6 +138,7 @@ jam.LevelMap.loadTileMap = function(tilesize, data, tilestrip, indices){
 	if(h === 0) { return; }
 	var w = lines[0].split(",").length;
 	if(w === 0) { return; }
+	jam.log("tilemap:"+w+"x"+h);
 
 	var map = jam.LevelMap(tilesize, w, h, tilestrip);
 
@@ -146,7 +152,7 @@ jam.LevelMap.loadTileMap = function(tilesize, data, tilestrip, indices){
 			{
 				// If there's a function callback for this tileindex, call it.
 				// But usually just place the tile.
-				if(indices[index] === undefined){
+				if(!indices || indices[index] === undefined){
 					var t = jam.LevelMap.Tile(x, y, index, true);
 					map.put(t, x, y);
 				}
