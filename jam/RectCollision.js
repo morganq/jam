@@ -101,18 +101,18 @@ jam.Collision.overlaps = function(s1, s2, callback){
 // This function operates exactly like above, but uses collideSingle
 jam.Collision.collide = function(s1, s2){
 	if(s1 === undefined || s2 === undefined) { return false; }
-	if(s1.children === undefined){
+	if(s1.getChildren === undefined){
 		var g1 = [s1];
 	}
 	else
 	{
-		var g1 = s1.children;
+		var g1 = s1.getChildren();
 	}
-	if(s2.children === undefined){
+	if(s2.getChildren === undefined){
 		var g2 = [s2];
 	}
 	else{
-		var g2 = s2.children;
+		var g2 = s2.getChildren();
 	}
 	var returnValue = false;
 	for(var i = 0, iMax = g1.length; i < iMax; ++i)

@@ -38,7 +38,7 @@ jam.Game = function(width, height, parentElement){
 
 	self.width = width;
 	self.height = height;
-	self.fps = 80;		// Frequency
+	self.fps = 50;		// Frequency
 	self.elapsed = 0; 	// Period
 	self.time = 0;
 	self.camera = {
@@ -59,8 +59,8 @@ jam.Game = function(width, height, parentElement){
 	self._canvas.height = self.height
 
 	self._tick = function(){
-		self.render();
 		self.update();
+		self.render();
 		window.setTimeout(self._tick, 1000.0/self.fps);
 	};
 

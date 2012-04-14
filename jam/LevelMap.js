@@ -27,6 +27,7 @@ jam.LevelMap = function(tilesize, w, h, image){
 	// set its collide and overlaps to its collisionGroup's functions
 	self.collide = self.tileCollisionGroup.collide;
 	self.overlaps = self.tileCollisionGroup.overlaps;
+	self.getChildren = self.tileCollisionGroup.getChildren;
 
 	// Render each tile if it is visible
 	self.render = function(context, camera){
@@ -108,12 +109,12 @@ jam.LevelMap = function(tilesize, w, h, image){
 
 // A Tile object is basically a Sprite with less stuff in it. It just needs to
 // be able to draw and collide. 
-jam.LevelMap.Tile = function(x, y, imageIndex, collide){
+jam.LevelMap.Tile = function(x, y, w, h, imageIndex, collide){
 	var self = {};
-	self.x = x * 32;
-	self.y = y * 32;
-	self.width = 32;
-	self.height = 32;
+	self.x = x * w;
+	self.y = y * h;
+	self.width = w;
+	self.height = h;
 	self._collisionOffsetX = 0;
 	self._collisionOffsetY = 0;
 	self._collisionOffsetWidth = 0;
@@ -133,10 +134,9 @@ jam.LevelMap.Tile = function(x, y, imageIndex, collide){
 // CSV data and placing the appropriate tiles.
 jam.LevelMap.loadTileMap = function(tilesize, data, tilestrip, indices){
 	// Parse CSV (commas between cells, newlines between rows)
-	var lines = data.split("\n");
-	var h = lines.length;
+	var h = data.length;
 	if(h === 0) { return; }
-	var w = lines[0].split(",").length;
+	var w = data[0].length;
 	if(w === 0) { return; }
 	jam.log("tilemap:"+w+"x"+h);
 
@@ -144,16 +144,16 @@ jam.LevelMap.loadTileMap = function(tilesize, data, tilestrip, indices){
 
 	for(var y = 0; y < h; ++y)
 	{
-		var cells = lines[y].split(",");
+		var cells = data[y];
 		for(var x = 0; x < w; ++x)
 		{
 			var index = cells[x];
-			if(index !== "0") // 0 special case for "no tile thanks"
+			if(index !== 0) // 0 special case for "no tile thanks"
 			{
 				// If there's a function callback for this tileindex, call it.
 				// But usually just place the tile.
 				if(!indices || indices[index] === undefined){
-					var t = jam.LevelMap.Tile(x, y, index, true);
+					var t = jam.LevelMap.Tile(x, y, tilesize, tilesize, index, true);
 					map.put(t, x, y);
 				}
 				else
