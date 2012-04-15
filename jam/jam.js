@@ -7,7 +7,7 @@ jam = function(){
 	lib.modules = [];
 	lib.cache = {};
 	lib.loaded = false;
-	
+
 	// Loads and caches image files or sound files.
 	lib.load = function(url, onload){
 		var obj;
@@ -25,18 +25,18 @@ jam = function(){
 		}
 		return obj;
 	}
-	
+
 	// Preload just calls load and counts the number of currently loading objects
 	lib.preload = function(url){
 		lib.log("preloading: " + url);
-		_preloadTotalObjects++;	
+		_preloadTotalObjects++;
 		lib.load(url, function(obj){
 				_preloadCompletedObjects++;
 				lib.log("finished preloading: " + url);
 			});
 	}
-	
-	// Draws the loading bar on the canvas object or removes it if 
+
+	// Draws the loading bar on the canvas object or removes it if
 	// everything is done loading
 	var _showPreloader = function(context, callback)
 	{
@@ -56,11 +56,11 @@ jam = function(){
 			callback();
 		}
 	}
-	
+
 	// Makes a canvas filling the parent element
 	lib.showPreloader = function(element, callback)
 	{
-		var _canvas = document.createElement("canvas"); 
+		var _canvas = document.createElement("canvas");
 		var _context = _canvas.getContext("2d");
 		element.appendChild(_canvas);
 		_canvas.width = element.clientWidth;
@@ -69,7 +69,7 @@ jam = function(){
 		_context.height = element.clientHeight;
 		_showPreloader(_context, callback);
 	}
-	
+
 	// Includes a file by making a <script> tag
 	lib.include = function(name){
 		// Could be pretty bad to include a file multiple times
@@ -85,9 +85,19 @@ jam = function(){
 
 		document.write("<script language='javascript' src='" + name + "?" + nocache + "'></script>");
 		lib.modules.push(name);
-	}
-	lib.includeModule = function(name){ lib.include("jam/"+name+".js"); }
-	
+	};
+
+        var scripts = document.getElementsByTagName("script"),
+	// The browsers executes scripts in order. While this script is executing it
+	// will be the last script on the page.
+	src = scripts[scripts.length-1].src,
+	lastSlash = src.lastIndexOf("/"),	  // +1 to preserve the slash
+	jsGameSrcPath = (lastSlash === -1)? "": src.slice(0, lastSlash + 1);
+
+	lib.includeModule = function(name){
+	    lib.include(jsGameSrcPath + name + ".js");
+	};
+
 	// Log is viewable by checking this object or through some debug implementation
 	// in a debug module
 	lib.logMessages = [];
