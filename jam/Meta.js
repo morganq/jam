@@ -39,8 +39,8 @@ jam.Meta.extend = function(fOld, fAdd, returnSecond, passObject)
 // Mixin pattern, extend some class (cOld) with contents of another (cMix)
 jam.Meta.mixin = function(cOld, cMix)
 {
-	cNew = function(){
-		self = cOld.apply(null, arguments);
+	var cNew = function(){
+		var self = cOld.apply(null, arguments);
 
 
 		return self;
