@@ -58,6 +58,7 @@ jam.Input = function(){
 		}
 		switch(code){
 			case 192: return "~"; break;
+		        case 32: return "SPACE"; break;
 			case 37: return "LEFT"; break;
 			case 38: return "UP"; break;
 			case 39: return "RIGHT"; break;
