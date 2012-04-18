@@ -72,14 +72,14 @@ jam.Input = function(){
 	};
 	document.onmousemove = function(e){
 	    console.log("FIRE");
-	    var mouse = _getMouseCords(e);
+	    var mouse = _getMouseCoords(e);
 	    if(mouse != undefined){
 		self.mouse = mouse;
 	    }
 	    // Else mouse is not on the canvas so we don't update the position.
 	};
 
-	var _getMouseCords = function(e){
+	var _getMouseCoords = function(e){
 	    var x;
 	    var y;
 	    if (e.pageX || e.pageY) {
