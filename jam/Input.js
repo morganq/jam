@@ -27,6 +27,18 @@ if(jam.Input.keyDown(keyBindings.attack)) { player.playAnimation(attacking); }
 */
 
 jam.Input = function(){
+        var KEY_CODE_MAP = {
+	    192:"~",
+	    32:"SPACE",
+	    37:"LEFT",
+	    38:"UP",
+	    39:"RIGHT",
+	    40:"DOWN"
+	};
+	var MOUSE_BUTTON_MAP = {
+	    1:'MOUSE_RIGHT',
+	    3:'MOUSE_LEFT'
+	};
 	var self = {}
 	
 	// Hook into the js events for key pressing
@@ -44,27 +56,75 @@ jam.Input = function(){
 			self._justReleasedKeys.push(self._getName(code));
 		}
 	};	
+	document.onmousedown = function(e){
+	    var button = self._getMouseButton(e.which);
+	    if(self._keys[button] === false || self._keys[button] === undefined){
+		self._keys[button] = true;
+		self._justPressedKeys.push(button);
+	    }
+	};
+	document.onmouseup = function(e){
+	    var button = self._getMouseButton(e.which);
+	    if(self._keys[button] === true){
+		self._keys[button] = false;
+		self._justReleasedKeys.push(button);
+	    }
+	};
+	document.onmousemove = function(e){
+	    console.log("FIRE");
+	    var mouse = _getMouseCords(e);
+	    if(mouse != undefined){
+		self.mouse = mouse;
+	    }
+	    // Else mouse is not on the canvas so we don't update the position.
+	};
+
+	var _getMouseCords = function(e){
+	    var x;
+	    var y;
+	    if (e.pageX || e.pageY) {
+		// Chrome, Opera
+		x = e.pageX;
+		y = e.pageY;
+	    }
+	    else { 
+		// FireFox
+		x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft; 
+		y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop; 
+	    } 
+	    x -= jam.Game._canvas.offsetLeft;
+	    y -= jam.Game._canvas.offsetTop;
+
+	    if(x >= 0 && x < jam.Game._canvas.width && y >= 0 && y < jam.Game._canvas.height){
+		return jam.Vector(x, y);
+	    }
+	};
 	
 	self._justPressedKeys = [];
 	self._justReleasedKeys = [];
 	self._keys = {};
+	self.mouse = {};
 	
 	// Based on a keycode, get a string name for the key.
 	// Special cases for arrow keys
 	self._getName = function(code){
-		if(code >= 65 && code <= 90) { return String.fromCharCode(code); }
-		else if(code >= 97 && code <= 122){
-			return String.fromCharCode(code).toUpperCase();
-		}
-		switch(code){
-			case 192: return "~"; break;
-		        case 32: return "SPACE"; break;
-			case 37: return "LEFT"; break;
-			case 38: return "UP"; break;
-			case 39: return "RIGHT"; break;
-			case 40: return "DOWN"; break;
-			default: return "UNKNOWN";
-		}
+	    if(code >= 65 && code <= 90) { return String.fromCharCode(code); }
+	    else if(code >= 97 && code <= 122){
+		return String.fromCharCode(code).toUpperCase();
+	    }
+	    if(KEY_CODE_MAP[code] != undefined){
+		return KEY_CODE_MAP[code];
+	    }else{
+		return "UKNOWN";
+	    }
+	};
+
+        self._getMouseButton = function(code){
+	    if(MOUSE_BUTTON_MAP[code] != undefined){
+		return MOUSE_BUTTON_MAP[code];
+	    }else{
+		return "UNKNOWN";
+	    }
 	};
 
 	self._update = function()
@@ -95,7 +155,10 @@ jam.Input = function(){
 	self.keyDown = function(name){
 		return self._keys[name];
 	};	
-	
+	self.mousePosition = function(name){
+	    return self.mouse;
+	};
+
 	return self;
 
 }();
