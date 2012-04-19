@@ -22,10 +22,10 @@ jam.Game = function(width, height, parentElement){
 	self._context = self._canvas.getContext("2d");
 	self._children = [];
 
+	jam.Game._canvas = self._canvas;
+
 	// List of objects to be removed
 	self._remove = [];
-	
-	
 	
 	// Always keep the canvas in the middle of the parent element
 	onresize = function(){

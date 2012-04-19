@@ -8,10 +8,10 @@ jam.Meta = {};
 // of fNew. Useful to extend a class constructor!!
 jam.Meta.extend = function(fOld, fAdd, returnSecond, passObject)
 {
-	fNew = function(){
+	var fNew = function(){
 		var returnValue1 = fOld.apply(null,arguments);
 		if(passObject) { 
-			args = [returnValue1];
+			var args = [returnValue1];
 			for(var i=0,len = arguments.length; i < len; i++)
 			{
 				args[i+1] = arguments[i];
@@ -39,8 +39,8 @@ jam.Meta.extend = function(fOld, fAdd, returnSecond, passObject)
 // Mixin pattern, extend some class (cOld) with contents of another (cMix)
 jam.Meta.mixin = function(cOld, cMix)
 {
-	cNew = function(){
-		self = cOld.apply(null, arguments);
+	var cNew = function(){
+		var self = cOld.apply(null, arguments);
 
 
 		return self;
