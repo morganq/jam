@@ -2,11 +2,12 @@
 // Handles rendering the portion of the map which is visible and collisions
 // Useful for platformers or RPGs, and other things probably
 
-jam.LevelMap = function(tilesize, w, h, image){
+jam.LevelMap = function(tilesize, w, h, image, indices){
 	var self = jam.CollisionGroup();
 	self._layer = 0;
 	self.tiles = [];
 	self.tilesize = tilesize;
+	self.indices = indices;
 
 	// The LevelMap should function like a collisongroup for tiles.
 	self.tileCollisionGroup = jam.CollisionGroup();
@@ -77,15 +78,29 @@ jam.LevelMap = function(tilesize, w, h, image){
 	}
 
 	// Put a tile at a position
-	self.put = function(t, x, y){
-		if(self.tiles[y][x] !== null){
-			self.tileCollisionGroup.remove(self.tiles[y][x]);	
+	self.put = function(ti, x, y){
+		// If there's a function callback for this tileindex, call it.
+		// But usually just place the tile.
+		if(!indices || indices[ti] === undefined){
+			var t = jam.LevelMap.Tile(x, y, tilesize, tilesize, ti, true);
+			if(self.tiles[y][x] !== null){
+				self.tileCollisionGroup.remove(self.tiles[y][x]);	
+			}
+			self.tiles[y][x] = t;
+			if(t.collides)
+			{
+				self.tileCollisionGroup.add(t);
+			}
 		}
-		self.tiles[y][x] = t;
-		if(t.collides)
+		else
 		{
-			self.tileCollisionGroup.add(t);
-		}
+			indices[ti](self, x, y);
+		}	
+
+	}
+	
+	self.putAtPixel = function(ti, x, y){
+		self.put(ti, Math.floor(x / self.tilesize), Math.floor(y / self.tilesize));
 	}
 
 	// Clear the tilemap
@@ -102,6 +117,24 @@ jam.LevelMap = function(tilesize, w, h, image){
 		}
 	};
 
+	self.serialize = function() { 
+		var json = "map_data = [\n";
+		for(var y in self.tiles){
+			json += "[";
+			for (var x in self.tiles[y]){
+				var i = 0;
+				if(self.tiles[y][x] !== null)
+				{
+					i = self.tiles[y][x].imageIndex;
+				}
+				json += i + ((x < self.tiles[y].length - 1) ? "," : "")
+			}
+			json += "]" + ((y < self.tiles.length - 1) ? "\n" : "");
+		}
+		json += "];";
+		return json
+	};
+	
 	self.reset(w,h);
 
 	return self;	
@@ -140,7 +173,7 @@ jam.LevelMap.loadTileMap = function(tilesize, data, tilestrip, indices){
 	if(w === 0) { return; }
 	jam.log("tilemap:"+w+"x"+h);
 
-	var map = jam.LevelMap(tilesize, w, h, tilestrip);
+	var map = jam.LevelMap(tilesize, w, h, tilestrip, indices);
 
 	for(var y = 0; y < h; ++y)
 	{
@@ -150,16 +183,7 @@ jam.LevelMap.loadTileMap = function(tilesize, data, tilestrip, indices){
 			var index = cells[x];
 			if(index !== 0) // 0 special case for "no tile thanks"
 			{
-				// If there's a function callback for this tileindex, call it.
-				// But usually just place the tile.
-				if(!indices || indices[index] === undefined){
-					var t = jam.LevelMap.Tile(x, y, tilesize, tilesize, index, true);
-					map.put(t, x, y);
-				}
-				else
-				{
-					indices[index](map, x, y);
-				}
+				map.put(index,x,y);
 			}
 		}
 	}

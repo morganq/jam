@@ -110,10 +110,10 @@ jam = function(){
 
 // Load all the default modules
 jam.includeModule("Meta");
+jam.includeModule("Vector");
 jam.includeModule("Util");
 jam.includeModule("Game");
 jam.includeModule("Sprite");
 jam.includeModule("Input");
-jam.includeModule("Vector");
 jam.includeModule("Sound");
 jam.includeModule("Text");

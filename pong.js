@@ -52,10 +52,10 @@ initialize = function(){
 		player.velocity.y = 0;
 		
 		// And then set it based on input
-		if( jam.Input.keyDown("UP") ){
+		if( jam.Input.buttonDown("UP") ){
 			player.velocity.y = -250;
 		}
-		if( jam.Input.keyDown("DOWN") ){
+		if( jam.Input.buttonDown("DOWN") ){
 			player.velocity.y = 250;
 		}
 		

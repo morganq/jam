@@ -6,7 +6,7 @@
 /*	SAMPLE USAGE:
 
 ** Basic movement behavior **
-if(jam.Input.keyDown("LEFT")) { player.x = -1; }
+if(jam.Input.buttonDown("LEFT")) { player.x = -1; }
 
 ** Fire a weapon  **
 if(jam.Input.justPressed("X")) {
@@ -17,12 +17,12 @@ if(jam.Input.justPressed("X")) {
 }
 
 ** Charge up a jump **
-if(jam.Input.keyDown("Z")) {	charge += elapsed; }
+if(jam.Input.buttonDown("Z")) {	charge += elapsed; }
 if(jam.Input.justReleased("Z")){	velocity.y = -(charge+40); }
 
-** Bindable keys **
-keyBindings = {attack: "Z", dash: "X"};
-if(jam.Input.keyDown(keyBindings.attack)) { player.playAnimation(attacking); }
+** Bindable buttons **
+buttonBindings = {attack: "Z", dash: "X"};
+if(jam.Input.buttonDown(buttonBindings.attack)) { player.playAnimation(attacking); }
 
 */
 
@@ -36,101 +36,69 @@ jam.Input = function(){
 	    40:"DOWN"
 	};
 	var MOUSE_BUTTON_MAP = {
-	    1:'MOUSE_RIGHT',
-	    3:'MOUSE_LEFT'
+	    1:'MOUSE_LEFT',
+	    3:'MOUSE_RIGHT'
 	};
 	var self = {}
-	
-	// Hook into the js events for key pressing
-	document.onkeydown = function(e){
-		var code = ('which' in e) ? e.which : e.keyCode;
-		if(self._keys[self._getName(code)] === false || self._keys[self._getName(code)] === undefined){
-			self._keys[self._getName(code)] = true;
-			self._justPressedKeys.push(self._getName(code));
-		}
-	};
-	document.onkeyup = function(e){
-		var code = ('which' in e) ? e.which : e.keyCode;
-		if(self._keys[self._getName(code)] === true){
-			self._keys[self._getName(code)] = false;
-			self._justReleasedKeys.push(self._getName(code));
-		}
-	};	
-	document.onmousedown = function(e){
-	    var button = self._getMouseButton(e.which);
-	    if(self._keys[button] === false || self._keys[button] === undefined){
-		self._keys[button] = true;
-		self._justPressedKeys.push(button);
-	    }
-	};
-	document.onmouseup = function(e){
-	    var button = self._getMouseButton(e.which);
-	    if(self._keys[button] === true){
-		self._keys[button] = false;
-		self._justReleasedKeys.push(button);
-	    }
-	};
-	document.onmousemove = function(e){
-	    console.log("FIRE");
-	    var mouse = _getMouseCoords(e);
-	    if(mouse != undefined){
-		self.mouse = mouse;
-	    }
-	    // Else mouse is not on the canvas so we don't update the position.
-	};
 
 	var _getMouseCoords = function(e){
+		if(jam.Game._canvas === undefined) { return; }
 	    var x;
 	    var y;
 	    if (e.pageX || e.pageY) {
-		// Chrome, Opera
-		x = e.pageX;
-		y = e.pageY;
+			// Chrome, Opera
+			x = e.pageX;
+			y = e.pageY;
 	    }
 	    else { 
-		// FireFox
-		x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft; 
-		y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop; 
+			// FireFox
+			x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft; 
+			y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop; 
 	    } 
 	    x -= jam.Game._canvas.offsetLeft;
 	    y -= jam.Game._canvas.offsetTop;
 
 	    if(x >= 0 && x < jam.Game._canvas.width && y >= 0 && y < jam.Game._canvas.height){
-		return jam.Vector(x, y);
+			return jam.Vector(x, y);
 	    }
 	};
 	
-	self._justPressedKeys = [];
-	self._justReleasedKeys = [];
-	self._keys = {};
-	self.mouse = {};
+	self._justPressedButtons = [];
+	self._justReleasedButtons = [];
+	self._buttons = {};
+	self.mouse = jam.Vector(0,0);
 	
 	// Based on a keycode, get a string name for the key.
 	// Special cases for arrow keys
 	self._getName = function(code){
-	    if(code >= 65 && code <= 90) { return String.fromCharCode(code); }
+	    if((code >= 65 && code <= 90) || (code >= 48 && code <= 57)) 
+		{
+			return String.fromCharCode(code);
+		}
 	    else if(code >= 97 && code <= 122){
-		return String.fromCharCode(code).toUpperCase();
+			return String.fromCharCode(code).toUpperCase();
 	    }
 	    if(KEY_CODE_MAP[code] != undefined){
-		return KEY_CODE_MAP[code];
-	    }else{
-		return "UKNOWN";
+			return KEY_CODE_MAP[code];
+	    }
+		else{
+			return "UKNOWN";
 	    }
 	};
 
-        self._getMouseButton = function(code){
+    self._getMouseButton = function(code){
 	    if(MOUSE_BUTTON_MAP[code] != undefined){
-		return MOUSE_BUTTON_MAP[code];
-	    }else{
-		return "UNKNOWN";
+			return MOUSE_BUTTON_MAP[code];
+	    }
+		else{
+			return "UNKNOWN";
 	    }
 	};
 
 	self._update = function()
 	{
-		self._justPressedKeys = [];
-		self._justReleasedKeys = [];
+		self._justPressedButtons = [];
+		self._justReleasedButtons = [];
 	}
 
 	// Now add our update at the end of the game update. We need
@@ -145,20 +113,54 @@ jam.Input = function(){
 	
 	
 	self.justPressed = function(name){
-		return self._justPressedKeys.indexOf(name) !== -1;
+		return self._justPressedButtons.indexOf(name) !== -1;
 	};
 	
 	self.justReleased = function(name){
-		return self._justReleasedKeys.indexOf(name) !== -1;
+		return self._justReleasedButtons.indexOf(name) !== -1;
 	};
 	
-	self.keyDown = function(name){
-		return self._keys[name];
+	self.buttonDown = function(name){
+		return self._buttons[name];
 	};	
-	self.mousePosition = function(name){
-	    return self.mouse;
-	};
 
+	// Hook into the js events for key pressing
+	document.onkeydown = function(e){
+		var code = ('which' in e) ? e.which : e.keyCode;
+		if(self._buttons[self._getName(code)] === false || self._buttons[self._getName(code)] === undefined){
+			self._buttons[self._getName(code)] = true;
+			self._justPressedButtons.push(self._getName(code));
+		}
+	};
+	document.onkeyup = function(e){
+		var code = ('which' in e) ? e.which : e.keyCode;
+		if(self._buttons[self._getName(code)] === true){
+			self._buttons[self._getName(code)] = false;
+			self._justReleasedButtons.push(self._getName(code));
+		}
+	};	
+	document.onmousedown = function(e){
+	    var button = self._getMouseButton(e.which);
+	    if(self._buttons[button] === false || self._buttons[button] === undefined){
+			self._buttons[button] = true;
+			self._justPressedButtons.push(button);
+	    }
+	};
+	document.onmouseup = function(e){
+	    var button = self._getMouseButton(e.which);
+	    if(self._buttons[button] === true){
+			self._buttons[button] = false;
+			self._justReleasedButtons.push(button);
+	    }
+	};
+	document.onmousemove = function(e){
+	    var mouse = _getMouseCoords(e);
+	    if(mouse != undefined){
+			self.mouse = mouse;
+	    }
+	    // Else mouse is not on the canvas so we don't update the position.
+	};	
+	
 	return self;
 
 }();

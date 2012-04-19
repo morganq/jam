@@ -97,12 +97,12 @@ makePlayer = function(game, map){
 		
 		// Running / standing
 		player.velocity.x = 0;
-		if(jam.Input.keyDown("LEFT")){
+		if(jam.Input.buttonDown("LEFT")){
 			player.velocity.x = -90;
 			player.playAnimation(player.anim_run);
 			player.facing = jam.Sprite.LEFT;
 		}
-		else if(jam.Input.keyDown("RIGHT")){
+		else if(jam.Input.buttonDown("RIGHT")){
 			player.velocity.x = 90;
 			player.playAnimation(player.anim_run);
 			player.facing = jam.Sprite.RIGHT;
