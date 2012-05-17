@@ -38,16 +38,16 @@ jam.Input.joyJustChanged = false;
 jam.Input._lastJoy = jam.Vector(0,0);
 jam.Input._update = jam.extend(jam.Input._update, function(){
 	var v = jam.Vector(0,0);
-	if(jam.Input.keyDown("UP")){
+	if(jam.Input.buttonDown("UP")){
 		v.y -= 1;
 	}
-	if(jam.Input.keyDown("DOWN")){
+	if(jam.Input.buttonDown("DOWN")){
 		v.y += 1;
 	}
-	if(jam.Input.keyDown("LEFT")){
+	if(jam.Input.buttonDown("LEFT")){
 		v.x -= 1
 	}
-	if(jam.Input.keyDown("RIGHT")){
+	if(jam.Input.buttonDown("RIGHT")){
 		v.x += 1;
 	}
 	if(v.x != 0 && v.y != 0)
