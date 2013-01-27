@@ -84,7 +84,7 @@ define(["jam", "vector"], function(jam, Vector) {
 			if(self.facing == cls.LEFT){ context.scale(-1, 1);}
 
 			if(self.image) {
-				context.drawImage(self.image, sx, sy, sw, sh, -self.width/2,-self.height/2, w, h);
+				context.drawImage(self.image, sx, sy, sw, sh, -Math.floor(self.width/2),-Math.floor(self.height/2), w, h);
 			}
 			
 			for (var i = 0; i < self.subSprites.length; ++i)
@@ -175,7 +175,7 @@ define(["jam", "vector"], function(jam, Vector) {
 	cls.LEFT = 0;
 	cls.RIGHT = 1;
 
-	cls.AnimationStrip = function(frames, frameWidth, frameHeight, rate, offsetX, offsetY, callback){
+	cls.Animation = function(frames, frameWidth, frameHeight, rate, offsetX, offsetY, callback){
 		if(offsetX === undefined) { offsetX = 0; }
 		if(offsetY === undefined) { offsetY = 0; }
 		var self = {};

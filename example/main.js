@@ -3,29 +3,27 @@ require.config({
 });
 
 require(["jam"], function(jam) {
+	jam.dataDir = "example/data/";
 
 	var main = function() {
-		var g = new jam.Game(640, 480);
+		var g = new jam.Game(320, 240, document.body, 2);
 
 		// convenience
 		var scene = g.root.scene;
 		
-		var guy = new jam.Sprite(30, 30, "example/data/image.png");
+		var guy = new jam.Sprite(30, 30, "player_red.png");
+		guy.playAnimation(new jam.Sprite.Animation([1,2,3,4,5,6], 16, 17, 10));
 		scene.add(guy);
 
 		guy.on("update", function(elapsed) {
-			this.angle += elapsed * 360;
-		});
-
-		scene.on("update", function(elapsed) {
-			this.alpha -= elapsed / 10;
+			
 		});
 
 		g.run();
 	};
 
 	var preload = function() {
-		jam.preload("example/data/image.png");
+		jam.preload("image.png");
 		jam.showPreloader(main);
 	};
 

@@ -13,8 +13,11 @@ define(["game", "sprite"], function(Game, Sprite) {
 	lib.preloaded = false;
 	lib.levelForConsoleLog = 0;
 
+	lib.dataDir = "";
+
 	// Loads and caches image files or sound files.
 	lib.load = function(url, onload){
+		url = lib.dataDir + url;
 		if(lib.cache[url] !== undefined) {
 			onload(lib.cache[url]);
 			return;
