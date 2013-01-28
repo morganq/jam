@@ -1,4 +1,4 @@
-define(["jam", "vector"], function(jam, Vector) {
+define(["util", "vector"], function(Util, Vector) {
 	var cls = function(x, y, image) {
 		var self = {};	
 		
@@ -33,7 +33,7 @@ define(["jam", "vector"], function(jam, Vector) {
 		// to it. Automatically adjusts the sprite's width and height.
 		self.setImage = function(url, frameWidth, frameHeight)
 		{
-			require("jam").load(url, function(obj){
+			Util.load(url, function(obj){
 				self.image = obj;
 				self.width = (frameWidth === undefined) ? self.image.naturalWidth : frameWidth;
 				self.height = (frameHeight === undefined) ?  self.image.naturalHeight : frameHeight;

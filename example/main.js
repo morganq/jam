@@ -3,7 +3,7 @@ require.config({
 });
 
 require(["jam"], function(jam) {
-	jam.dataDir = "example/data/";
+	jam.config({dataDir:"example/data/"});
 
 	var main = function() {
 		var g = new jam.Game(320, 240, document.body, 2);
