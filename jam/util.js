@@ -104,5 +104,17 @@ define([], function() {
 		}
 	};
 
+  lib.isArray = function(o) {
+    return Object.prototype.toString.call(o) === '[object Array]'; 
+  };
+
+  lib.pack = function(o) {
+    if (lib.isArray(o)) {
+      return o;
+    } else {
+      return [o];
+    }
+  };
+
 	return lib;
 });

@@ -12,6 +12,17 @@ define(["util", "vector"], function(Util, Vector) {
 		self.height = 0;
 		self.angle = 0;
 		self.alpha = 1.0;
+
+        // Stuff related to collision.
+        self._collisionOffsetX = 0;
+        self._collisionOffsetY = 0;
+        self._collisionOffsetWidth = 0;
+        self._collisionOffsetHeight = 0;
+        self.immovable = false;
+        self.touchungTop = false;
+        self.touchungBottom = false;
+        self.touchungLeft = false;
+        self.touchungRight = false;
 		
 		self.image = null;
 		self.visible = true; // The sprite can be hidden by setting this to false
@@ -41,7 +52,7 @@ define(["util", "vector"], function(Util, Vector) {
 		};
 
 		if(image !== undefined) {
-			self.setImage(image);
+		  self.setImage(image);
 		}
 
 		// Called by game, this is how the Sprite shows up on screen
@@ -158,7 +169,6 @@ define(["util", "vector"], function(Util, Vector) {
 				sprite._game = null;
 			}
 		};		
-
 
 		// extending functionality
 		self.on = function(fnName, doFn) {
