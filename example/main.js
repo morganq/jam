@@ -56,6 +56,9 @@ require(["jam"], function(jam) {
         // o
         console.log(jam.Rect.overlap(guy, dummy));
         console.log(jam.Rect.overlap(guy, immovableDummy));
+      } else if (e.keyCode == 83) {
+        console.log(jam.Rect.separate(guy, dummy));
+        console.log(jam.Rect.separate(guy, immovableDummy));
       }
       return false;
     }
