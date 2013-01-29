@@ -2,7 +2,7 @@ require.config({
 	baseUrl:"jam/"
 });
 
-require(["jam", "rect", "debug"], function(jam, Rect, Debug) {
+require(["jam"], function(jam) {
   jam.dataDir = "example/data/";
 
   var main = function() {
@@ -15,13 +15,13 @@ require(["jam", "rect", "debug"], function(jam, Rect, Debug) {
     guy.setImage("player_red.png", 16, 17);
 	guy.playAnimation(new jam.Sprite.Animation([1,2,3,4,5,6], 16, 17, 10));
 	scene.add(guy);
-    guy.on("render", Debug.drawBox);
+    guy.on("render", jam.Debug.drawBox);
 
 	var dummy = new jam.Sprite(60, 60);
     dummy.setImage("player_red.png", 16, 17);
 	dummy.playAnimation(new jam.Sprite.Animation([1,2,3,4,5,6], 16, 17, 10));
 	scene.add(dummy);
-    dummy.on("render", Debug.drawBox);
+    dummy.on("render", jam.Debug.drawBox);
 
 	guy.on("update", function(elapsed) {
 
@@ -42,7 +42,7 @@ require(["jam", "rect", "debug"], function(jam, Rect, Debug) {
         // right
         guy.x += 5;
       } else if (e.keyCode == 84) {
-        console.log(Collide.overlaps(guy, dummy));
+        console.log(jam.Rect.overlaps(guy, dummy));
       }
       return false;
     }

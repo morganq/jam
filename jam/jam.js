@@ -1,8 +1,10 @@
-define(["game", "sprite"], function(Game, Sprite) {
+define(["game", "sprite", "rect", "debug"], function(Game, Sprite, Rect, Debug) {
 	var lib = {};
 
 	lib.Game = Game;
 	lib.Sprite = Sprite;
+    lib.Rect = Rect;
+    lib.Debug = Debug;
 
 	var _preloadCompletedObjects = 0;
 	var _preloadTotalObjects = 0;
