@@ -20,6 +20,8 @@ define([], function() {
 			return;
 		}
 
+		onload = onload || function() {};
+
 		var obj;
 		// IMAGE
 		if(url.match(/\.(jpeg|jpg|png|gif)(\?.*)?$/)){

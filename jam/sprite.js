@@ -176,13 +176,12 @@ define(["util", "vector"], function(Util, Vector) {
 	cls.RIGHT = 1;
 
 	cls.Animation = function(frames, rate, offsetX, offsetY, callback){
-		if(offsetX === undefined) { offsetX = 0; }
-		if(offsetY === undefined) { offsetY = 0; }
+		offsetX = offsetX || 0;
+		offsetY = offsetY || 0;
 		var self = {};
 		self.rate = rate;
 		self.callback = callback;
 		self.numFrames = frames.length;
-		self.frames = frames;
 		
 		self.getFrameData = function(sprite, i) {
 			var frame = {};
