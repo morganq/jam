@@ -66,7 +66,7 @@ define(["util", "vector"], function(Util, Vector) {
 			self.animation = animation;
 			if(force) { self._force = true; }
 			if(!self.frame || force){
-				self.frame = self.animation.frames[0];
+				self.frame = self.animation.getFrameData(self, 0);
 				self.animationFrame = 0;
 			}
 		};
@@ -103,7 +103,7 @@ define(["util", "vector"], function(Util, Vector) {
 
 			if(self.animation !== null){
 				self.animationFrame = (self.animationFrame + (elapsed * self.animation.rate));
-				if(self.animationFrame > self.animation.frames.length) // Wrap around the end
+				if(self.animationFrame > self.animation.numFrames-1) // Wrap around the end
 				{
 					self.animationFrame = 0;
 					if(self.animation.callback !== undefined){
@@ -112,7 +112,7 @@ define(["util", "vector"], function(Util, Vector) {
 				}
 
 				// Make sure it's an integer frame index
-				self.frame = self.animation.frames[Math.floor(self.animationFrame)];
+				self.frame = self.animation.getFrameData(self, Math.floor(self.animationFrame));
 
 				// We don't reset the frame number in case the animation actually
 				// changes. It's common for people to make the same playAnimation
@@ -120,7 +120,7 @@ define(["util", "vector"], function(Util, Vector) {
 				// anim.
 				if(self.animation !== self.lastAnimation || self._force){
 					self.animationFrame = 0;
-					self.frame = self.animation.frames[0];
+					self.frame = self.animation.getFrameData(self, 0);
 					self._force = false;
 				}
 				self.lastAnimation = self.animation;
@@ -175,23 +175,24 @@ define(["util", "vector"], function(Util, Vector) {
 	cls.LEFT = 0;
 	cls.RIGHT = 1;
 
-	cls.Animation = function(frames, frameWidth, frameHeight, rate, offsetX, offsetY, callback){
+	cls.Animation = function(frames, rate, offsetX, offsetY, callback){
 		if(offsetX === undefined) { offsetX = 0; }
 		if(offsetY === undefined) { offsetY = 0; }
 		var self = {};
 		self.rate = rate;
-		self.frames = [];
 		self.callback = callback;
-		var numFrames = frames.length;
-		for(var i = 0; i < numFrames; ++i)
-		{
+		self.numFrames = frames.length;
+		self.frames = frames;
+		
+		self.getFrameData = function(sprite, i) {
 			var frame = {};
-			frame.x = (frames[i] * frameWidth) + offsetX;
+			frame.x = (frames[i] * sprite.width) + offsetX;
 			frame.y = offsetY;
-			frame.w = frameWidth;
-			frame.h = frameHeight;
-			self.frames.push(frame);
+			frame.w = sprite.width;
+			frame.h = sprite.height;
+			return frame;
 		}
+
 		return self;
 	};
 

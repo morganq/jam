@@ -13,7 +13,7 @@ require(["jam"], function(jam) {
 		
 		var guy = new jam.Sprite(30, 30);
 		guy.setImage("player_red.png", 16, 17);
-		guy.playAnimation(new jam.Sprite.Animation([1,2,3,4,5,6], 16, 17, 10));
+		guy.playAnimation(new jam.Sprite.Animation([1,2,3,4,5,6], 10));
 		scene.add(guy);
 
 		guy.on("update", function(elapsed) {
