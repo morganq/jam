@@ -37,14 +37,6 @@ define(["jam", "vector"], function(jam, Vector) {
 				self.image = obj;
 				self.width = (frameWidth === undefined) ? self.image.naturalWidth : frameWidth;
 				self.height = (frameHeight === undefined) ?  self.image.naturalHeight : frameHeight;
-              console.log("???");
-              console.log(url);
-              console.log(self.height);
-              console.log(self.width);
-              console.log(self.image.naturalHeight);
-              console.log(self.image.naturalWidth);
-              console.log(frameWidth);
-              console.log(frameHeight);
 			});
 		};
 
