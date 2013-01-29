@@ -41,7 +41,7 @@ define(["jam", "vector"], function(jam, Vector) {
     var returnValue = false;
     for(var i = 0; i < g1.length; ++i) {
       for(var j = 0; j < g2.length; ++j) {
-        if (self.collideSingle(g1[i], g2[j])) {
+        if (self.separate(g1[i], g2[j])) {
           returnValue = true;
         }
       }
@@ -49,7 +49,7 @@ define(["jam", "vector"], function(jam, Vector) {
     return returnValue; 
   };
 
-  self.collideSingle = function(s1, s2) {
+  self.separate = function(s1, s2) {
     if(!self.overlap(s1, s2)){
       return false;
     }

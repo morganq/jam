@@ -23,6 +23,13 @@ require(["jam"], function(jam) {
 	scene.add(dummy);
     dummy.on("render", jam.Debug.drawBox);
 
+	var immovableDummy = new jam.Sprite(80, 80);
+    immovableDummy.setImage("player_red.png", 16, 17);
+	immovableDummy.playAnimation(new jam.Sprite.Animation([1,2,3,4,5,6], 16, 17, 10));
+	scene.add(immovableDummy);
+    immovableDummy.on("render", jam.Debug.drawBox);
+    immovableDummy.immovable = true;
+
 	guy.on("update", function(elapsed) {
 
 	});
@@ -41,9 +48,14 @@ require(["jam"], function(jam) {
       } else if (e.keyCode == 39) {
         // right
         guy.x += 5;
-      } else if (e.keyCode == 84) {
-        //console.log(jam.Rect.overlap(guy, dummy));
+      } else if (e.keyCode == 67) {
+        // c
         console.log(jam.Rect.collide(guy, dummy));
+        console.log(jam.Rect.collide(guy, immovableDummy));
+      } else if (e.keyCode == 79) {
+        // o
+        console.log(jam.Rect.overlap(guy, dummy));
+        console.log(jam.Rect.overlap(guy, immovableDummy));
       }
       return false;
     }
