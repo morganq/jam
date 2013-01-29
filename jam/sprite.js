@@ -35,8 +35,8 @@ define(["util", "vector"], function(Util, Vector) {
 		{
 			Util.load(url, function(obj){
 				self.image = obj;
-				self.width = (frameWidth === undefined) ? self.image.naturalWidth : frameWidth;
-				self.height = (frameHeight === undefined) ?  self.image.naturalHeight : frameHeight;
+				self.width = frameWidth || self.image.naturalWidth;
+				self.height = frameHeight || self.image.naturalHeight;
 			});
 		};
 
