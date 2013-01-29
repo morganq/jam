@@ -2,7 +2,7 @@ require.config({
 	baseUrl:"jam/"
 });
 
-require(["jam", "collisions"], function(jam, Collide) {
+require(["jam", "collisions", "debug"], function(jam, Collide, Debug) {
   jam.dataDir = "example/data/";
 
   var main = function() {
@@ -11,13 +11,23 @@ require(["jam", "collisions"], function(jam, Collide) {
 	// convenience
 	var scene = g.root.scene;
 
-	var guy = new jam.Sprite(30, 30, "player_red.png");
+	var guy = new jam.Sprite(30, 30);
+    guy.setImage("player_red.png", 16, 17);
 	guy.playAnimation(new jam.Sprite.Animation([1,2,3,4,5,6], 16, 17, 10));
 	scene.add(guy);
+    guy.on("render", Debug.drawBox);
+    console.log("Guy width height");
+    console.log(guy.height);
+    console.log(guy.width);
 
-	var dummy = new jam.Sprite(60, 60, "player_red.png");
+	var dummy = new jam.Sprite(60, 60);
+    dummy.setImage("player_red.png", 16, 17);
 	dummy.playAnimation(new jam.Sprite.Animation([1,2,3,4,5,6], 16, 17, 10));
 	scene.add(dummy);
+    dummy.on("render", Debug.drawBox);
+    console.log("Dummy width height");
+    console.log(dummy.height);
+    console.log(dummy.width);
 
 	guy.on("update", function(elapsed) {
 

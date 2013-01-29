@@ -37,11 +37,19 @@ define(["jam", "vector"], function(jam, Vector) {
 				self.image = obj;
 				self.width = (frameWidth === undefined) ? self.image.naturalWidth : frameWidth;
 				self.height = (frameHeight === undefined) ?  self.image.naturalHeight : frameHeight;
+              console.log("???");
+              console.log(url);
+              console.log(self.height);
+              console.log(self.width);
+              console.log(self.image.naturalHeight);
+              console.log(self.image.naturalWidth);
+              console.log(frameWidth);
+              console.log(frameHeight);
 			});
 		};
 
 		if(image !== undefined) {
-			self.setImage(image);
+		  self.setImage(image);
 		}
 
 		// Called by game, this is how the Sprite shows up on screen
@@ -159,7 +167,6 @@ define(["jam", "vector"], function(jam, Vector) {
 			}
 		};		
 
-
 		// extending functionality
 		self.on = function(fnName, doFn) {
 			var old = self[fnName];
@@ -182,6 +189,8 @@ define(["jam", "vector"], function(jam, Vector) {
 		self.rate = rate;
 		self.frames = [];
 		self.callback = callback;
+        self.frameWidth = frameWidth;
+        self.frameHeight = frameHeight;
 		var numFrames = frames.length;
 		for(var i = 0; i < numFrames; ++i)
 		{
