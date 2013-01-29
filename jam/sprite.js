@@ -1,4 +1,4 @@
-define(["jam", "vector"], function(jam, Vector) {
+define(["util", "vector"], function(Util, Vector) {
 	var cls = function(x, y, image) {
 		var self = {};	
 		
@@ -44,10 +44,10 @@ define(["jam", "vector"], function(jam, Vector) {
 		// to it. Automatically adjusts the sprite's width and height.
 		self.setImage = function(url, frameWidth, frameHeight)
 		{
-			require("jam").load(url, function(obj){
+			Util.load(url, function(obj){
 				self.image = obj;
-				self.width = (frameWidth === undefined) ? self.image.naturalWidth : frameWidth;
-				self.height = (frameHeight === undefined) ?  self.image.naturalHeight : frameHeight;
+				self.width = frameWidth || self.image.naturalWidth;
+				self.height = frameHeight || self.image.naturalHeight;
 			});
 		};
 
@@ -77,7 +77,7 @@ define(["jam", "vector"], function(jam, Vector) {
 			self.animation = animation;
 			if(force) { self._force = true; }
 			if(!self.frame || force){
-				self.frame = self.animation.frames[0];
+				self.frame = self.animation.getFrameData(self, 0);
 				self.animationFrame = 0;
 			}
 		};
@@ -114,7 +114,7 @@ define(["jam", "vector"], function(jam, Vector) {
 
 			if(self.animation !== null){
 				self.animationFrame = (self.animationFrame + (elapsed * self.animation.rate));
-				if(self.animationFrame > self.animation.frames.length) // Wrap around the end
+				if(self.animationFrame > self.animation.numFrames-1) // Wrap around the end
 				{
 					self.animationFrame = 0;
 					if(self.animation.callback !== undefined){
@@ -123,7 +123,7 @@ define(["jam", "vector"], function(jam, Vector) {
 				}
 
 				// Make sure it's an integer frame index
-				self.frame = self.animation.frames[Math.floor(self.animationFrame)];
+				self.frame = self.animation.getFrameData(self, Math.floor(self.animationFrame));
 
 				// We don't reset the frame number in case the animation actually
 				// changes. It's common for people to make the same playAnimation
@@ -131,7 +131,7 @@ define(["jam", "vector"], function(jam, Vector) {
 				// anim.
 				if(self.animation !== self.lastAnimation || self._force){
 					self.animationFrame = 0;
-					self.frame = self.animation.frames[0];
+					self.frame = self.animation.getFrameData(self, 0);
 					self._force = false;
 				}
 				self.lastAnimation = self.animation;
@@ -185,25 +185,23 @@ define(["jam", "vector"], function(jam, Vector) {
 	cls.LEFT = 0;
 	cls.RIGHT = 1;
 
-	cls.Animation = function(frames, frameWidth, frameHeight, rate, offsetX, offsetY, callback){
-		if(offsetX === undefined) { offsetX = 0; }
-		if(offsetY === undefined) { offsetY = 0; }
+	cls.Animation = function(frames, rate, offsetX, offsetY, callback){
+		offsetX = offsetX || 0;
+		offsetY = offsetY || 0;
 		var self = {};
 		self.rate = rate;
-		self.frames = [];
 		self.callback = callback;
-        self.frameWidth = frameWidth;
-        self.frameHeight = frameHeight;
-		var numFrames = frames.length;
-		for(var i = 0; i < numFrames; ++i)
-		{
+		self.numFrames = frames.length;
+		
+		self.getFrameData = function(sprite, i) {
 			var frame = {};
-			frame.x = (frames[i] * frameWidth) + offsetX;
+			frame.x = (frames[i] * sprite.width) + offsetX;
 			frame.y = offsetY;
-			frame.w = frameWidth;
-			frame.h = frameHeight;
-			self.frames.push(frame);
+			frame.w = sprite.width;
+			frame.h = sprite.height;
+			return frame;
 		}
+
 		return self;
 	};
 
