@@ -4,18 +4,9 @@ define(["util"], function(Util) {
     if(s1 === undefined || s2 === undefined) { return false; }
 
     // Turn everything in a list to simplify comparison.
-    var g1;
-    var g2;
-    if (Util.isArray(s1)) {
-      g1 = s1;
-    } else {
-      g1 = [s1];
-    }
-    if (Util.isArray(s2)) {
-      g2 = s2;
-    } else {
-      g2 = [s2];
-    }
+    var g1 = Util.pack(s1);
+    var g2 = Util.pack(s2);
+
     var returnValue = false;
     // Now loop through the two lists (n^2 LOL) and compare everything
     // TODO: Quadtree? :P
@@ -47,18 +38,8 @@ define(["util"], function(Util) {
     if(s1 === undefined || s2 === undefined) { return false; }
 
     // Turn everything in a list to simplify comparison.
-    var g1;
-    var g2;
-    if (Util.isArray(s1)) {
-      g1 = s1;
-    } else {
-      g1 = [s1];
-    }
-    if (Util.isArray(s2)) {
-      g2 = s2;
-    } else {
-      g2 = [s2];
-    }
+    var g1 = Util.pack(s1);
+    var g2 = Util.pack(s2);
 
     var returnValue = false;
     for(var i = 0; i < g1.length; ++i) {
