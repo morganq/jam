@@ -1,6 +1,6 @@
 define(["jam", "vector"], function(jam, Vector) {
   var self = {};
-  self.overlaps = function(s1, s2, callback){
+  self.overlap = function(s1, s2, callback){
     if(s1 === undefined || s2 === undefined) { return false; }
     // Temporary.
     var g1 = [s1];
@@ -41,13 +41,16 @@ define(["jam", "vector"], function(jam, Vector) {
     var returnValue = false;
     for(var i = 0; i < g1.length; ++i) {
       for(var j = 0; j < g2.length; ++j) {
-        self.collideSingle(g1[i], g2[j]);
+        if (self.collideSingle(g1[i], g2[j])) {
+          returnValue = true;
+        }
       }
     }
+    return returnValue; 
   };
 
   self.collideSingle = function(s1, s2) {
-    if(!self.collide(s1, s2)){
+    if(!self.overlap(s1, s2)){
       return false;
     }
     

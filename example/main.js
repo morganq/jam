@@ -42,7 +42,8 @@ require(["jam"], function(jam) {
         // right
         guy.x += 5;
       } else if (e.keyCode == 84) {
-        console.log(jam.Rect.overlaps(guy, dummy));
+        //console.log(jam.Rect.overlap(guy, dummy));
+        console.log(jam.Rect.collide(guy, dummy));
       }
       return false;
     }
