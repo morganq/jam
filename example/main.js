@@ -2,30 +2,57 @@ require.config({
 	baseUrl:"jam/"
 });
 
-require(["jam"], function(jam) {
-	jam.dataDir = "example/data/";
+require(["jam", "collisions"], function(jam, Collide) {
+  jam.dataDir = "example/data/";
 
-	var main = function() {
-		var g = new jam.Game(320, 240, document.body, 2);
+  var main = function() {
+	var g = new jam.Game(320, 240, document.body, 2);
 
-		// convenience
-		var scene = g.root.scene;
-		
-		var guy = new jam.Sprite(30, 30, "player_red.png");
-		guy.playAnimation(new jam.Sprite.Animation([1,2,3,4,5,6], 16, 17, 10));
-		scene.add(guy);
+	// convenience
+	var scene = g.root.scene;
 
-		guy.on("update", function(elapsed) {
-			
-		});
+	var guy = new jam.Sprite(30, 30, "player_red.png");
+	guy.playAnimation(new jam.Sprite.Animation([1,2,3,4,5,6], 16, 17, 10));
+	scene.add(guy);
 
-		g.run();
-	};
+	var dummy = new jam.Sprite(60, 60, "player_red.png");
+	dummy.playAnimation(new jam.Sprite.Animation([1,2,3,4,5,6], 16, 17, 10));
+	scene.add(dummy);
 
-	var preload = function() {
-		jam.preload("image.png");
-		jam.showPreloader(main);
-	};
+	guy.on("update", function(elapsed) {
 
-	preload();
+	});
+
+    // Lazy movement for testing collisions.
+    var handlekeydown = function(e){
+      console.log('keycode: '+e.keyCode);
+      console.log(guy.x);
+      if (e.keyCode == 38) {
+        // up
+        guy.y -= 5;
+      } else if (e.keyCode == 40) {
+        // down
+        guy.y += 5;
+      } else if (e.keyCode == 37) {
+        // left
+        guy.x -= 5;
+      } else if (e.keyCode == 39) {
+        // right
+        guy.x += 5;
+      } else if (e.keyCode == 84) {
+        console.log(Collide.overlaps(guy, dummy));
+      }
+      return false;
+    }
+    document.addEventListener('keydown',handlekeydown,false);
+
+	g.run();
+  };
+
+  var preload = function() {
+	jam.preload("image.png");
+	jam.showPreloader(main);
+  };
+
+  preload();
 });
