@@ -1,4 +1,4 @@
-define(["vector", "sprite", "collisions"], function(Vector, Sprite, Collision) {
+define(["vector", "sprite"], function(Vector, Sprite) {
 	return function(width, height, parentElement, zoom){
 		var self = {};
 

@@ -12,6 +12,17 @@ define(["jam", "vector"], function(jam, Vector) {
 		self.height = 0;
 		self.angle = 0;
 		self.alpha = 1.0;
+
+        // Stuff related to collision.
+        self._collisionOffsetX = 0;
+        self._collisionOffsetY = 0;
+        self._collisionOffsetWidth = 0;
+        self._collisionOffsetHeight = 0;
+        self.immovable = false;
+        self.touchungTop = false;
+        self.touchungBottom = false;
+        self.touchungLeft = false;
+        self.touchungRight = false;
 		
 		self.image = null;
 		self.visible = true; // The sprite can be hidden by setting this to false

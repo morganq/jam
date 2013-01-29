@@ -2,7 +2,7 @@ require.config({
 	baseUrl:"jam/"
 });
 
-require(["jam", "collisions", "debug"], function(jam, Collide, Debug) {
+require(["jam", "rect", "debug"], function(jam, Rect, Debug) {
   jam.dataDir = "example/data/";
 
   var main = function() {
