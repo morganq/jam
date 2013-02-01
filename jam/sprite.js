@@ -1,4 +1,4 @@
-define(["util", "vector"], function(Util, Vector) {
+define(["util", "vector", "../lib/sylvester"], function(Util, Vector, Syl) {
 	var cls = function(x, y, image) {
 		var self = {};	
 		
@@ -157,18 +157,71 @@ define(["util", "vector"], function(Util, Vector) {
 		// List of objects to be removed
 		self._removeList = [];
 
+		self.parentSprite = null;
+
 		self.add = function(sprite){
 			self.subSprites.push(sprite);
-			sprite._game = self;
+			sprite.parentSprite = self;
 		};
 
 		self.remove = function(sprite){
 			if(self._removeList.indexOf(sprite) === -1)
 			{
 				self._removeList.push(sprite);
-				sprite._game = null;
+				sprite.parentSprite = null;
 			}
 		};		
+
+		// Finds the world-space transform. Recursively up through
+		// the scene graph.
+		self.getTransform = function() {
+			var parentMatrix = Syl.Matrix.I(3);
+			if(self.parentSprite) {
+				parentMatrix = self.parentSprite.getTransform();
+			}
+			var translationMatrix = Syl.$M([
+				[1, 0, self.x +self.width/2],
+				[0, 1, self.y +self.height/2],
+				[0, 0, 1]]);
+
+			var rotationMatrix = Syl.Matrix.RotationZ(self.angle * Math.PI / 180);	
+			var halfWidthTranslationMatrix = Syl.$M([
+				[1, 0, -self.width/2],
+				[0, 1, -self.height/2],
+				[0, 0, 1]]);
+
+			return parentMatrix.x(
+				translationMatrix.x(
+					rotationMatrix.x(	
+						halfWidthTranslationMatrix)));
+		};
+
+		// Inverse worldspace transform
+		self.getInverseTransform = function() {
+			return self.getTransform().inv();
+		}
+
+		// Gives a static-frame sprite under a different parent in the
+		// scene graph hierarchy, but with the same absolute position
+		// and rotation
+		self.transcend = function(otherParent) {
+			var totalTrans = otherParent.getInverseTransform().x(
+				self.getTransform());
+			newParentPos = totalTrans.x(Syl.$V([0,0,1]));
+			offsetPos = totalTrans.x(Syl.$V([1,0,1]));
+			var x = newParentPos.elements[0];
+			var y = newParentPos.elements[1];
+			var ox = offsetPos.elements[0];
+			var oy = offsetPos.elements[1];
+			var dx = ox-x;
+			var dy = oy-y;
+			var a = Math.atan2(dy, dx);
+			var spr = new cls(x, y);
+			spr.frame = self.frame;
+			spr.image = self.image;
+			spr.angle = a / Math.PI * 180;
+			return spr;
+		}
 
 		// extending functionality
 		self.on = function(fnName, doFn) {

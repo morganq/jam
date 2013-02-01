@@ -1,8 +1,8 @@
 require.config({
-	baseUrl:"jam/"
+	baseUrl:"jam/",
 });
 
-require(["jam"], function(jam) {
+require(["jam", "../lib/sylvester"], function(jam, syl) {
   jam.config({dataDir:"example/data/"});
 
   var main = function() {
@@ -14,23 +14,9 @@ require(["jam"], function(jam) {
 	var guy = new jam.Sprite(30, 30);
 	guy.setImage("player_red.png", 16, 17);
 	guy.playAnimation(new jam.Sprite.Animation([1,2,3,4,5,6], 10, 0, 0, function() {
-	  jam.Sound.play("footstep1.mp3");
+	  //jam.Sound.play("footstep1.mp3");
 	}));
 	scene.add(guy);
-    guy.on("render", jam.Debug.drawBox);
-
-	var dummy = new jam.Sprite(60, 60);
-    dummy.setImage("player_red.png", 16, 17);
-	dummy.playAnimation(new jam.Sprite.Animation([1,2,3,4,5,6], 10, 0, 0));
-	scene.add(dummy);
-    dummy.on("render", jam.Debug.drawBox);
-
-	var immovableDummy = new jam.Sprite(80, 80);
-    immovableDummy.setImage("player_red.png", 16, 17);
-	immovableDummy.playAnimation(new jam.Sprite.Animation([1,2,3,4,5,6], 10, 0, 0));
-	scene.add(immovableDummy);
-    immovableDummy.on("render", jam.Debug.drawBox);
-    immovableDummy.immovable = true;
 
 	guy.on("update", function(elapsed) {
 
@@ -52,16 +38,27 @@ require(["jam"], function(jam) {
         guy.x += 5;
       } else if (e.keyCode == 67) {
         // c
-        console.log(jam.Rect.collide(guy, dummy));
-        console.log(jam.Rect.collide(guy, immovableDummy));
+		var t = guy.getTransform();
+		console.log(t.inspect());
+		var inv = scene.getInverseTransform();
+		var test = syl.$V([0, 0, 1]);
+		var abs = t.x(test);
+		console.log(abs.inspect());
+		var fin = inv.x(abs);
+		console.log(fin.inspect());
+		
       } else if (e.keyCode == 79) {
         // o
-        console.log(jam.Rect.overlap(guy, dummy));
-        console.log(jam.Rect.overlap(guy, immovableDummy));
+		guy.angle += 10;
       } else if (e.keyCode == 83) {
-        console.log(jam.Rect.separate(guy, dummy));
-        console.log(jam.Rect.separate(guy, immovableDummy));
-      }
+		scene.angle -= 5;
+      } else if (e.keyCode == 82) {
+		g.root.x -= 5;
+	  } else if (e.keyCode == 84) {
+		scene.y += 10;
+	  } else if (e.keyCode == 85) {
+		  g.root.add(guy.transcend(g.root));
+	  }
       return false;
     }
     document.addEventListener('keydown',handlekeydown,false);
