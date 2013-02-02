@@ -23,10 +23,14 @@ define(["util", "vector", "../lib/sylvester"], function(Util, Vector, Syl) {
         self.touchingBottom = false;
         self.touchingLeft = false;
         self.touchingRight = false;
+
+		self.collides = true;
 		
 		self.image = null;
 		 // The sprite can be hidden by setting this to false
 		self.visible = true;
+
+		self.scale = 1.0;
 		
 		self.velocity = new Vector(0,0);
 		self.acceleration = new Vector(0,0);

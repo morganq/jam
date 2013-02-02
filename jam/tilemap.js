@@ -6,6 +6,7 @@ define(["sprite", "util"], function(Sprite, Util) {
 		self.tileSize = tileSize;
 		self.tileFunctions = tileFunctions || {};
 		self.tilesheetLoaded = false;
+		self.collides = false;
 
 		// Resets the map and loads from a CSV (row-per-line, comma-separated cells)
 		self.loadCSV = function(text) {
@@ -55,6 +56,7 @@ define(["sprite", "util"], function(Sprite, Util) {
 			}
 			else if(tileIndex !== 0) {
 				var t = new Sprite(x * self.tileSize, y * self.tileSize);
+				t.immovable = true;
 				t.tileIndex = tileIndex;
 				self.tiles[y][x] = t;
 				self.add(t);
