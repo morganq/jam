@@ -19,19 +19,17 @@ define(["util", "vector", "../lib/sylvester"], function(Util, Vector, Syl) {
         self._collisionOffsetWidth = 0;
         self._collisionOffsetHeight = 0;
         self.immovable = false;
-        self.touchungTop = false;
-        self.touchungBottom = false;
-        self.touchungLeft = false;
-        self.touchungRight = false;
+        self.touchingTop = false;
+        self.touchingBottom = false;
+        self.touchingLeft = false;
+        self.touchingRight = false;
 		
 		self.image = null;
-		self.visible = true; // The sprite can be hidden by setting this to false
+		 // The sprite can be hidden by setting this to false
+		self.visible = true;
 		
 		self.velocity = new Vector(0,0);
 		self.acceleration = new Vector(0,0);
-
-		// How much the render position is affected by the camera
-		self.parallax = new Vector(1,1);
 
 		// Animation state
 		self.animation = null;
@@ -40,15 +38,22 @@ define(["util", "vector", "../lib/sylvester"], function(Util, Vector, Syl) {
 		self.animationFrame = 0;
 		self._force = false;	
 		
-		// Loads an image and when it's finished loading, sets the sprite's image
+		// Loads an image; when it's finished loading, sets the sprite's image
 		// to it. Automatically adjusts the sprite's width and height.
-		self.setImage = function(url, frameWidth, frameHeight)
+		self.setImage = function(url_or_obj, frameWidth, frameHeight)
 		{
-			Util.load(url, function(obj){
+			var postLoad = function(obj){
 				self.image = obj;
 				self.width = frameWidth || self.image.naturalWidth;
 				self.height = frameHeight || self.image.naturalHeight;
-			});
+			};
+			// has 'complete' which means it's an image object
+			if(url_or_obj.complete) {
+				postLoad(url_or_obj);
+			}
+			else { // otherwise we'll assume it's a url
+				Util.load(url_or_obj, postLoad);
+			}
 		};
 
 		if(image !== undefined) {
@@ -72,16 +77,7 @@ define(["util", "vector", "../lib/sylvester"], function(Util, Vector, Syl) {
 						
 		};
 
-		// Simply sets the animation to whatever you pass it.
-		self.playAnimation = function(animation, force) { 
-			self.animation = animation;
-			if(force) { self._force = true; }
-			if(!self.frame || force){
-				self.frame = self.animation.getFrameData(self, 0);
-				self.animationFrame = 0;
-			}
-		};
-		
+				
 		self._renderHelper = function(context, image, w, h, sx, sy, sw, sh){
 			// Avoid horrible automatic blending if we have non-integer values
 			var tx = Math.floor(self.x + self.width/2);
@@ -95,7 +91,8 @@ define(["util", "vector", "../lib/sylvester"], function(Util, Vector, Syl) {
 			if(self.facing == cls.LEFT){ context.scale(-1, 1);}
 
 			if(self.image) {
-				context.drawImage(self.image, sx, sy, sw, sh, -Math.floor(self.width/2),-Math.floor(self.height/2), w, h);
+				context.drawImage(self.image, sx, sy, sw, sh,
+					-Math.floor(self.width/2),-Math.floor(self.height/2), w, h);
 			}
 			
 			for (var i = 0; i < self.subSprites.length; ++i)
@@ -105,11 +102,29 @@ define(["util", "vector", "../lib/sylvester"], function(Util, Vector, Syl) {
 
 			context.restore();
 		};
-		
+
+		// Simply sets the animation to whatever you pass it.
+		self.playAnimation = function(animation, force) { 
+			self.animation = animation;
+			if(force) { self._force = true; }
+			if(!self.frame || force){
+				self.frame = self.animation.getFrameData(self, 0);
+				self.animationFrame = 0;
+			}
+		};
+
+		// If you don't want an animation, but you want a single frame from a spritesheet
+		self.setSingleFrame = function(index) {
+			self.frame = {x: index * self.width, y:0, w: self.width, h:self.height}; 
+			self.animation = null;
+		}
+
 		// Handle simple physics every tick
 		self.update = function(elapsed){
 			// This filter just says "only leave me if i'm not in the remove list"
-			self.subSprites = self.subSprites.filter(function(x,i,a) { return self._removeList.indexOf(x) === -1; });
+			self.subSprites = self.subSprites.filter(
+				function(x,i,a) {
+					return self._removeList.indexOf(x) === -1; });
 			self._removeList = [];
 
 			if(self.animation !== null){
