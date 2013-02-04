@@ -1,4 +1,4 @@
-define(["util", "game", "vector", "sprite", "sound", "rect", "debug", "tilemap"], function(Util, Game, Vector, Sprite, Sound, Rect, Debug, TileMap) {
+define(["util", "game", "vector", "sprite", "sound", "rect", "debug", "tilemap", "input"], function(Util, Game, Vector, Sprite, Sound, Rect, Debug, TileMap, Input) {
 	var lib = {};
 
 	lib.Game = Game;
@@ -7,7 +7,8 @@ define(["util", "game", "vector", "sprite", "sound", "rect", "debug", "tilemap"]
     lib.Debug = Debug;
 	lib.Vector = Vector;
 	lib.Sound = Sound;
-	lib.TileMap = TileMap
+	lib.TileMap = TileMap;
+	lib.Input = Input;
 
 	lib.cache = Util.cache;
 

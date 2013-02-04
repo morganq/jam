@@ -1,4 +1,4 @@
-define(["vector", "sprite"], function(Vector, Sprite) {
+define(["vector", "sprite", "input", "util"], function(Vector, Sprite, Input, Util) {
 	return function(width, height, parentElement, zoom){
 		var self = {};
 
@@ -7,6 +7,7 @@ define(["vector", "sprite"], function(Vector, Sprite) {
 		self._canvas.style.position = "relative";
 		self._canvas.style.border = "1px solid black";
 		self._context = self._canvas.getContext("2d");
+		self.hasFocus = false;
 
 		zoom = zoom || 1;
 
@@ -26,7 +27,7 @@ define(["vector", "sprite"], function(Vector, Sprite) {
 		self._canvas.height = height;
 		self._context.width = self.width;
 		self._context.height = self.height;
-
+		self.zoom = zoom;
 
 		// Always keep the canvas in the middle of the parent element
 		var onresize = function(){
@@ -69,7 +70,10 @@ define(["vector", "sprite"], function(Vector, Sprite) {
 
 			self.time = (currentTime - startTime) / 1000.0;
 
-			self.root.update(self.elapsed);
+			if(self.hasFocus) {
+				self.root.update(self.elapsed);
+				Input.update(self);
+			}
 		};
 
 		// Called every frame. Clears the screen then calls render on each child.
@@ -86,7 +90,20 @@ define(["vector", "sprite"], function(Vector, Sprite) {
 
 		self.run = function(){
 			self._tick();
+			Input.registerGame(self);
 		};
+
+		self.gainFocus = function() {
+			self._canvas.style.outline = "2px solid black";
+			self.hasFocus = true;
+		}
+
+		self.loseFocus = function() {
+			self._canvas.style.outline = "";
+			self.hasFocus = false;
+		}
+
+		Util.mixinOn(self);
 
 		return self;
 	};

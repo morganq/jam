@@ -34,26 +34,25 @@ require(["jam", "../lib/sylvester"], function(jam, syl) {
 
 	guy.on("update", function(dt) {
 		jam.Rect.collide(guy, tm);
+		if(jam.Input.down("LEFT")) {
+			guy.velocity.x = -50;
+		}
+		else if (jam.Input.down("RIGHT")) {
+			guy.velocity.x = 50;
+		}
+		else {
+			guy.velocity.x = 0;
+		}
+		if(jam.Input.justPressed("UP")) {
+			guy.velocity.y = -100;
+		}
 	});
 
-    // Lazy movement for testing collisions.
-    var handlekeydown = function(e){
-      if (e.keyCode == 38) {
-        // up
-        guy.y -= 5;
-      } else if (e.keyCode == 40) {
-        // down
-        guy.y += 5;
-      } else if (e.keyCode == 37) {
-        // left
-        guy.x -= 5;
-      } else if (e.keyCode == 39) {
-        // right
-        guy.x += 5;
-	  }
-      return false;
-    }
-    document.addEventListener('keydown',handlekeydown,false);
+	g.root.on("update", function() {
+		if(jam.Input.justPressed("MOUSE_LEFT")){
+			console.log([jam.Input.mouse.x, jam.Input.mouse.y]);
+		}
+	});
 
 	g.run();
   };
@@ -64,5 +63,6 @@ require(["jam", "../lib/sylvester"], function(jam, syl) {
 	jam.showPreloader(main);
   };
 
+  preload();
   preload();
 });

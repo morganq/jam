@@ -55,21 +55,21 @@ define([], function() {
 	var _showPreloader = function(context, callback)
 	{
 		if(_preloadCompletedObjects < _preloadTotalObjects)
-		{
-			// Keep showing it until it's done!
-			window.setTimeout(function() { _showPreloader(context, callback); }, 50);
-			context.fillStyle = "rgba(0,0,0,1)";
-			context.fillRect(context.canvas.width / 2 - 102, context.canvas.height / 2 - 12, 204, 24);
-			context.fillStyle = "rgba(255,255,255,1)";
-			context.fillRect(context.canvas.width / 2 - 100, context.canvas.height / 2 - 10, 200, 20);
-			context.fillStyle = "rgba(0,255,128,1)";
-			context.fillRect(context.canvas.width / 2 - 100, context.canvas.height / 2 - 10, _preloadCompletedObjects * 200.0 / _preloadTotalObjects, 20);
-		}
-		else
-		{
-			context.canvas.parentNode.removeChild(context.canvas);
-			callback();
-		}
+			{
+				// Keep showing it until it's done!
+				window.setTimeout(function() { _showPreloader(context, callback); }, 50);
+				context.fillStyle = "rgba(0,0,0,1)";
+				context.fillRect(context.canvas.width / 2 - 102, context.canvas.height / 2 - 12, 204, 24);
+				context.fillStyle = "rgba(255,255,255,1)";
+				context.fillRect(context.canvas.width / 2 - 100, context.canvas.height / 2 - 10, 200, 20);
+				context.fillStyle = "rgba(0,255,128,1)";
+				context.fillRect(context.canvas.width / 2 - 100, context.canvas.height / 2 - 10, _preloadCompletedObjects * 200.0 / _preloadTotalObjects, 20);
+			}
+			else
+				{
+					context.canvas.parentNode.removeChild(context.canvas);
+					callback();
+				}
 	};
 
 	// Makes a canvas filling the parent element
@@ -99,22 +99,32 @@ define([], function() {
 			time:(new Date()).getTime() - startTime,
 			level:level,
 			message:text});
-		if(level >= lib.logLevel) {
-			console.log("[" + ((new Date().getTime() - startTime)/1000).toFixed(3) + "] " + text);
+			if(level >= lib.logLevel) {
+				console.log("[" + ((new Date().getTime() - startTime)/1000).toFixed(3) + "] " + text);
+			}
+	};
+
+	lib.isArray = function(o) {
+		return Object.prototype.toString.call(o) === '[object Array]'; 
+	};
+
+	lib.pack = function(o) {
+		if (lib.isArray(o)) {
+			return o;
+		} else {
+			return [o];
 		}
 	};
 
-  lib.isArray = function(o) {
-    return Object.prototype.toString.call(o) === '[object Array]'; 
-  };
-
-  lib.pack = function(o) {
-    if (lib.isArray(o)) {
-      return o;
-    } else {
-      return [o];
-    }
-  };
+	lib.mixinOn = function(o) {
+		o.on = function(fnName, doFn) {
+			var old = o[fnName];
+			o[fnName] = function() {
+				old.apply(o, arguments);
+				return doFn.apply(o, arguments);
+			};
+		};
+	}
 
 	return lib;
 });

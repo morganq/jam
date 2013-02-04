@@ -243,14 +243,9 @@ define(["util", "vector", "../lib/sylvester"], function(Util, Vector, Syl) {
 		}
 
 		// extending functionality
-		self.on = function(fnName, doFn) {
-			var old = self[fnName];
-			self[fnName] = function() {
-				old.apply(self, arguments);
-				return doFn.apply(self, arguments);
-			};
-		};
 		
+		Util.mixinOn(self);
+
 		return self;
 	};
 
