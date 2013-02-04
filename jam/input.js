@@ -1,5 +1,6 @@
 define(["vector"], function(Vector) {
 	var lib = {};	
+	// key -> name
 	var keycodeMap = {
 		192:"~",
 		32:"SPACE",
@@ -8,9 +9,10 @@ define(["vector"], function(Vector) {
 		39:"RIGHT",
 		40:"DOWN"
 	};
+	// button -> name
 	var mousebuttonMap = {
-		1:'MOUSE_LEFT',
-		3:'MOUSE_RIGHT'
+		1:"MOUSE_LEFT",
+		3:"MOUSE_RIGHT"
 	};
 	lib._buttons = [];
 	lib._justPressed = [];
@@ -26,15 +28,18 @@ define(["vector"], function(Vector) {
 	}
 
 	var getKeyButton = function(code) {
+		// Numbers + uppercase letters [48-57, 65-90]
 		if((code >= 65 && code <= 90) || (code >= 48 && code <= 57)) {
-				return String.fromCharCode(code);
-			}
-			else if(code >= 97 && code <= 122){
-				return String.fromCharCode(code).toUpperCase();
-			}
-			if(keycodeMap[code] != undefined){
-				return keycodeMap[code];
-			}
+			return String.fromCharCode(code);
+		}
+		// lowercase letters
+		else if(code >= 97 && code <= 122){
+			return String.fromCharCode(code).toUpperCase();
+		}
+		// keys defined in the mapping above
+		if(keycodeMap[code] != undefined){
+			return keycodeMap[code];
+		}
 	}
 
 	var getMouseCoords = function(game, e){
@@ -57,10 +62,12 @@ define(["vector"], function(Vector) {
 
 		if(x >= 0 && x < game._canvas.width * game.zoom
 		   && y >= 0 && y < game._canvas.height * game.zoom){
-			   return new Vector(x/game.zoom, y/game.zoom);
-		   }
+		   return new Vector(x/game.zoom, y/game.zoom);
+	   }
 	};
 
+	// Called when a game gets clicked on. Focuses the relevant
+	// game and unfocuses the others
 	var refocus = function(game) {
 		focused = game;
 		for(var i = 0; i < games.length; i++) {
@@ -73,6 +80,8 @@ define(["vector"], function(Vector) {
 		}
 	}
 
+	// Called by a particular game each frame so that we can
+	// reset frame-specific values (the "JUST" pressed and released values)
 	var updateFromGame = function(game) {
 		lib._justPressed = [];
 		lib._justReleased = [];
@@ -83,9 +92,16 @@ define(["vector"], function(Vector) {
 	lib.registerGame = function(game) {
 		var id = games.length;
 		games.push(game);
+		// Basically this is just "focus the first game that gets created"
+		// focused should never be null other than at this point in
+		// initialization
 		if(!focused) {
 			refocus(game);
 		}
+
+		// Helper function-wrapper so that I don't have to duplicate
+		// the "am i the focused game?" condition in each of the mouse
+		// events
 		var focusFunc = function(fn) {
 			return function(e) { 
 				if(game === focused) {
@@ -93,6 +109,7 @@ define(["vector"], function(Vector) {
 				}
 			}
 		}
+
 		// All the mouse stuff is bound to a specific canvas.
 		game._canvas.onclick = function() {
 			refocus(game);

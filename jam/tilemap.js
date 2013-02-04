@@ -8,7 +8,8 @@ define(["sprite", "util"], function(Sprite, Util) {
 		self.tilesheetLoaded = false;
 		self.collides = false;
 
-		// Resets the map and loads from a CSV (row-per-line, comma-separated cells)
+		// Resets the map and loads from a CSV (row-per-line,
+		// comma-separated cells)
 		self.loadCSV = function(text) {
 			self.subSprites = [];
 			self.tiles = [];
@@ -26,8 +27,9 @@ define(["sprite", "util"], function(Sprite, Util) {
 					self.put(index,x,y);
 				}
 			}
-			// It's possible for this (loadCSV) to be called before the tilesheet has loaded
-			// which means updateTileGraphics will be called after load instead of here.
+			// It's possible for this (loadCSV) to be called before
+			// the tilesheet has loaded which means updateTileGraphics will
+			// be called after load instead of here.
 			if(self.tilesheetLoaded) {
 				self.updateTileGraphics();
 			}

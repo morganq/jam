@@ -30,7 +30,7 @@ require(["jam", "../lib/sylvester"], function(jam, syl) {
 	var guy = new jam.Sprite(90, 0);
 	guy.setImage("player_red.png", 16, 17);
 	scene.add(guy);
-	guy.acceleration.y = 50;
+	guy.acceleration.y = 250;
 
 	guy.on("update", function(dt) {
 		jam.Rect.collide(guy, tm);

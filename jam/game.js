@@ -3,6 +3,7 @@ define(["vector", "sprite", "input", "util"], function(Vector, Sprite, Input, Ut
 		var self = {};
 
 		self._canvas = document.createElement("canvas");
+		// style attributes for doing "pixel-zoom" (nearest neighbor)
 		self._canvas.setAttribute("style","image-rendering: -moz-crisp-edges; image-rendering: -o-crisp-edges; image-rendering:-webkit-optimize-contrast; -ms-interpolation-mode:nearest-neighbor;");
 		self._canvas.style.position = "relative";
 		self._canvas.style.border = "1px solid black";
@@ -31,10 +32,10 @@ define(["vector", "sprite", "input", "util"], function(Vector, Sprite, Input, Ut
 
 		// Always keep the canvas in the middle of the parent element
 		var onresize = function(){
-			self._canvas.style.left = (parentElement.clientWidth / 2 - (self.width * zoom) / 2) + "px";
-			self._canvas.style.top = (parentElement.clientHeight / 2 - (self.height * zoom) / 2) + "px";
-			self._canvas.style.width = (self.width * zoom) + "px";
-			self._canvas.style.height = (self.height * zoom) + "px";
+			self._canvas.style.left = (parentElement.clientWidth / 2 - (self.width * self.zoom) / 2) + "px";
+			self._canvas.style.top = (parentElement.clientHeight / 2 - (self.height * self.zoom) / 2) + "px";
+			self._canvas.style.width = (self.width * self.zoom) + "px";
+			self._canvas.style.height = (self.height * self.zoom) + "px";
 		};
 		onresize();
 		parentElement.onresize = onresize;
@@ -61,8 +62,9 @@ define(["vector", "sprite", "input", "util"], function(Vector, Sprite, Input, Ut
 			window.setTimeout(self._tick, 1000.0/self.fps);
 		};
 
-		// Called every frame. Most importantly, calls update on each child
-		// Additionally, clears out removed elements and updates the camera
+		// Called every frame to do all logic unrelated to rendering. Calls
+		// update on the root sprite which will recursively call update on its
+		// children.
 		self.update = function(){
 			currentTime = new Date().getTime();
 			self.elapsed = (currentTime - lastFrameTime) / 1000.0;
@@ -76,11 +78,12 @@ define(["vector", "sprite", "input", "util"], function(Vector, Sprite, Input, Ut
 			}
 		};
 
-		// Called every frame. Clears the screen then calls render on each child.
+		// Called every frame. Clears the screen, then does a recursive render
+		// call on the root sprite. This will call render on its children and
+		// so on.
 		self.render = function(){
 			var ctx = self._context;
 			ctx.save();
-			//ctx.scale(zoom, zoom);
 			ctx.fillStyle = self.bgColor;
 			ctx.fillRect(0,0,self.width,self.height);
 
@@ -94,7 +97,7 @@ define(["vector", "sprite", "input", "util"], function(Vector, Sprite, Input, Ut
 		};
 
 		self.gainFocus = function() {
-			self._canvas.style.outline = "2px solid black";
+			self._canvas.style.outline = "2px solid #888";
 			self.hasFocus = true;
 		}
 
