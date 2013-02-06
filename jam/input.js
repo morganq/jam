@@ -62,8 +62,8 @@ define(["vector"], function(Vector) {
 
 		if(x >= 0 && x < game._canvas.width * game.zoom
 		   && y >= 0 && y < game._canvas.height * game.zoom){
-		   return new Vector(x/game.zoom, y/game.zoom);
-	   }
+			   return new Vector(x/game.zoom, y/game.zoom);
+		   }
 	};
 
 	// Called when a game gets clicked on. Focuses the relevant

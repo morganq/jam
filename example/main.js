@@ -1,9 +1,9 @@
 require.config({
-	baseUrl:"jam/",
+	baseUrl:"../jam/",
 });
 
 require(["jam", "../lib/sylvester"], function(jam, syl) {
-  jam.config({dataDir:"example/data/"});
+  jam.config({dataDir:"data/"});
 
   var main = function() {
 

@@ -3,8 +3,8 @@ define(["util", "game", "vector", "sprite", "sound", "rect", "debug", "tilemap",
 
 	lib.Game = Game;
 	lib.Sprite = Sprite;
-    lib.Rect = Rect;
-    lib.Debug = Debug;
+	lib.Rect = Rect;
+	lib.Debug = Debug;
 	lib.Vector = Vector;
 	lib.Sound = Sound;
 	lib.TileMap = TileMap;

@@ -1,11 +1,9 @@
 define(["util", "vector", "../lib/sylvester"], function(Util, Vector, Syl) {
 	var cls = function(x, y, image) {
 		var self = {};	
-		
-		self._game = null;
-		
+
 		self.facing = cls.RIGHT;	
-		
+
 		self.x = x;
 		self.y = y;
 		self.width = 0;
@@ -13,25 +11,26 @@ define(["util", "vector", "../lib/sylvester"], function(Util, Vector, Syl) {
 		self.angle = 0;
 		self.alpha = 1.0;
 
-        // Stuff related to collision.
-        self._collisionOffsetX = 0;
-        self._collisionOffsetY = 0;
-        self._collisionOffsetWidth = 0;
-        self._collisionOffsetHeight = 0;
-        self.immovable = false;
-        self.touchingTop = false;
-        self.touchingBottom = false;
-        self.touchingLeft = false;
-        self.touchingRight = false;
+		// Collision flags
+		self._collisionOffsetX = 0;
+		self._collisionOffsetY = 0;
+		self._collisionOffsetWidth = 0;
+		self._collisionOffsetHeight = 0;
+		// It will stay still when things collide with it, if true
+		self.immovable = false;
+		self.touchingTop = false;
+		self.touchingBottom = false;
+		self.touchingLeft = false;
+		self.touchingRight = false;
 
 		self.collides = true;
-		
+
 		self.image = null;
-		 // The sprite can be hidden by setting this to false
+		// The sprite can be hidden by setting this to false
 		self.visible = true;
 
 		self.scale = 1.0;
-		
+
 		self.velocity = new Vector(0,0);
 		self.acceleration = new Vector(0,0);
 
@@ -41,7 +40,7 @@ define(["util", "vector", "../lib/sylvester"], function(Util, Vector, Syl) {
 		self.frame = null;
 		self.animationFrame = 0;
 		self._force = false;	
-		
+
 		// Loads an image; when it's finished loading, sets the sprite's image
 		// to it. Automatically adjusts the sprite's width and height.
 		self.setImage = function(url_or_obj, frameWidth, frameHeight)
@@ -61,7 +60,7 @@ define(["util", "vector", "../lib/sylvester"], function(Util, Vector, Syl) {
 		};
 
 		if(image !== undefined) {
-		  self.setImage(image);
+			self.setImage(image);
 		}
 
 		// Called by game, this is how the Sprite shows up on screen
@@ -77,17 +76,17 @@ define(["util", "vector", "../lib/sylvester"], function(Util, Vector, Syl) {
 			}
 
 			self._renderHelper(context, self.image,
-				curFrame.w, curFrame.h, curFrame.x, curFrame.y, curFrame.w, curFrame.h);
-						
+							   curFrame.w, curFrame.h, curFrame.x, curFrame.y, curFrame.w, curFrame.h);
+
 		};
 
-				
+
 		self._renderHelper = function(context, image, w, h, sx, sy, sw, sh){
 			// Avoid horrible automatic blending if we have non-integer values
 			var tx = Math.floor(self.x + self.width/2);
 			var ty = Math.floor(self.y + self.height/2);
 			context.save();
-			
+
 			// Set up the context transform and alpha before drawing
 			context.translate(tx, ty);
 			if(self.angle !== 0){ context.rotate(self.angle * Math.PI / 180); }
@@ -96,11 +95,11 @@ define(["util", "vector", "../lib/sylvester"], function(Util, Vector, Syl) {
 
 			if(self.image) {
 				context.drawImage(self.image, sx, sy, sw, sh,
-					-Math.floor(self.width/2),-Math.floor(self.height/2), w, h);
+								  -Math.floor(self.width/2),
+								  -Math.floor(self.height/2), w, h);
 			}
-			
-			for (var i = 0; i < self.subSprites.length; ++i)
-			{
+
+			for (var i = 0; i < self.subSprites.length; ++i){
 				self.subSprites[i].render(context);
 			}
 
@@ -128,54 +127,52 @@ define(["util", "vector", "../lib/sylvester"], function(Util, Vector, Syl) {
 			// This filter just says "only leave me if i'm not in the remove list"
 			self.subSprites = self.subSprites.filter(
 				function(x,i,a) {
-					return self._removeList.indexOf(x) === -1; });
-			self._removeList = [];
+				return self._removeList.indexOf(x) === -1; });
+				self._removeList = [];
 
-			if(self.animation !== null){
-				self.animationFrame = (self.animationFrame + (elapsed * self.animation.rate));
-				if(self.animationFrame > self.animation.numFrames-1) // Wrap around the end
-				{
-					self.animationFrame = 0;
-					if(self.animation.callback !== undefined){
-						self.animation.callback();
-					}
+				if(self.animation !== null){
+					self.animationFrame = (self.animationFrame + (elapsed * self.animation.rate));
+					if(self.animationFrame > self.animation.numFrames-1) // Wrap around the end
+						{
+							self.animationFrame = 0;
+							if(self.animation.callback !== undefined){
+								self.animation.callback();
+							}
+						}
+
+						// Make sure it's an integer frame index
+						self.frame = self.animation.getFrameData(self, Math.floor(self.animationFrame));
+
+						// We don't reset the frame number in case the animation actually
+						// changes. It's common for people to make the same playAnimation
+						// call every tick, so make sure we only reset stuff if it's a new
+						// anim.
+						if(self.animation !== self.lastAnimation || self._force){
+							self.animationFrame = 0;
+							self.frame = self.animation.getFrameData(self, 0);
+							self._force = false;
+						}
+						self.lastAnimation = self.animation;
 				}
 
-				// Make sure it's an integer frame index
-				self.frame = self.animation.getFrameData(self, Math.floor(self.animationFrame));
+				// Add to velocity based on accel
+				self.velocity = Vector.add(self.velocity, Vector.mul(self.acceleration, elapsed));
 
-				// We don't reset the frame number in case the animation actually
-				// changes. It's common for people to make the same playAnimation
-				// call every tick, so make sure we only reset stuff if it's a new
-				// anim.
-				if(self.animation !== self.lastAnimation || self._force){
-					self.animationFrame = 0;
-					self.frame = self.animation.getFrameData(self, 0);
-					self._force = false;
-				}
-				self.lastAnimation = self.animation;
-			}
+				// Add to position based on velocity
+				self.x += self.velocity.x * elapsed;
+				self.y += self.velocity.y * elapsed;
 
-			// Add to velocity based on accel
-			self.velocity = Vector.add(self.velocity, Vector.mul(self.acceleration, elapsed));
-
-			// Add to position based on velocity
-			self.x += self.velocity.x * elapsed;
-			self.y += self.velocity.y * elapsed;
-
-			for (var i = 0; i < self.subSprites.length; ++i)
-			{
-				self.subSprites[i].update(elapsed);
-			}			
+				for (var i = 0; i < self.subSprites.length; ++i)
+					{
+						self.subSprites[i].update(elapsed);
+					}			
 		};
-
-
-		// Scene Graph stuff
-		self.subSprites = [];	
 
 		// List of objects to be removed
 		self._removeList = [];
 
+		// Scene Graph stuff
+		self.subSprites = [];	
 		self.parentSprite = null;
 
 		self.add = function(sprite){
@@ -185,10 +182,10 @@ define(["util", "vector", "../lib/sylvester"], function(Util, Vector, Syl) {
 
 		self.remove = function(sprite){
 			if(self._removeList.indexOf(sprite) === -1)
-			{
-				self._removeList.push(sprite);
-				sprite.parentSprite = null;
-			}
+				{
+					self._removeList.push(sprite);
+					sprite.parentSprite = null;
+				}
 		};		
 
 		// Finds the world-space transform. Recursively up through
@@ -199,20 +196,20 @@ define(["util", "vector", "../lib/sylvester"], function(Util, Vector, Syl) {
 				parentMatrix = self.parentSprite.getTransform();
 			}
 			var translationMatrix = Syl.$M([
-				[1, 0, self.x +self.width/2],
-				[0, 1, self.y +self.height/2],
-				[0, 0, 1]]);
+										   [1, 0, self.x +self.width/2],
+										   [0, 1, self.y +self.height/2],
+										   [0, 0, 1]]);
 
-			var rotationMatrix = Syl.Matrix.RotationZ(self.angle * Math.PI / 180);	
-			var halfWidthTranslationMatrix = Syl.$M([
-				[1, 0, -self.width/2],
-				[0, 1, -self.height/2],
-				[0, 0, 1]]);
+										   var rotationMatrix = Syl.Matrix.RotationZ(self.angle * Math.PI / 180);	
+										   var halfWidthTranslationMatrix = Syl.$M([
+																				   [1, 0, -self.width/2],
+																				   [0, 1, -self.height/2],
+																				   [0, 0, 1]]);
 
-			return parentMatrix.x(
-				translationMatrix.x(
-					rotationMatrix.x(	
-						halfWidthTranslationMatrix)));
+																				   return parentMatrix.x(
+																					   translationMatrix.x(
+																						   rotationMatrix.x(	
+																											halfWidthTranslationMatrix)));
 		};
 
 		// Inverse worldspace transform
@@ -224,8 +221,7 @@ define(["util", "vector", "../lib/sylvester"], function(Util, Vector, Syl) {
 		// scene graph hierarchy, but with the same absolute position
 		// and rotation
 		self.transcend = function(otherParent) {
-			var totalTrans = otherParent.getInverseTransform().x(
-				self.getTransform());
+			var totalTrans = otherParent.getInverseTransform().x(self.getTransform());
 			newParentPos = totalTrans.x(Syl.$V([0,0,1]));
 			offsetPos = totalTrans.x(Syl.$V([1,0,1]));
 			var x = newParentPos.elements[0];
@@ -243,7 +239,7 @@ define(["util", "vector", "../lib/sylvester"], function(Util, Vector, Syl) {
 		}
 
 		// extending functionality
-		
+
 		Util.mixinOn(self);
 
 		return self;
@@ -259,7 +255,7 @@ define(["util", "vector", "../lib/sylvester"], function(Util, Vector, Syl) {
 		self.rate = rate;
 		self.callback = callback;
 		self.numFrames = frames.length;
-		
+
 		self.getFrameData = function(sprite, i) {
 			var frame = {};
 			frame.x = (frames[i] * sprite.width) + offsetX;

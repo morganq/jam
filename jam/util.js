@@ -1,8 +1,8 @@
 define([], function() {
 	var lib = {};
 
-	var _preloadCompletedObjects = 0;
-	var _preloadTotalObjects = 0;
+	var preloadCompletedObjects = 0;
+	var preloadTotalObjects = 0;
 
 	var startTime = new Date().getTime();
 
@@ -43,33 +43,31 @@ define([], function() {
 	// Preload just calls load and counts the number of currently loading objects
 	lib.preload = function(url){
 		lib.log("preloading: " + url);
-		_preloadTotalObjects++;
+		preloadTotalObjects++;
 		lib.load(url, function(obj){
-			_preloadCompletedObjects++;
+			preloadCompletedObjects++;
 			lib.log("finished preloading: " + url);
 		});
 	};
 
 	// Draws the loading bar on the canvas object or removes it if
 	// everything is done loading
-	var _showPreloader = function(context, callback)
+	var showPreloader = function(context, callback)
 	{
-		if(_preloadCompletedObjects < _preloadTotalObjects)
-			{
-				// Keep showing it until it's done!
-				window.setTimeout(function() { _showPreloader(context, callback); }, 50);
-				context.fillStyle = "rgba(0,0,0,1)";
-				context.fillRect(context.canvas.width / 2 - 102, context.canvas.height / 2 - 12, 204, 24);
-				context.fillStyle = "rgba(255,255,255,1)";
-				context.fillRect(context.canvas.width / 2 - 100, context.canvas.height / 2 - 10, 200, 20);
-				context.fillStyle = "rgba(0,255,128,1)";
-				context.fillRect(context.canvas.width / 2 - 100, context.canvas.height / 2 - 10, _preloadCompletedObjects * 200.0 / _preloadTotalObjects, 20);
-			}
-			else
-				{
-					context.canvas.parentNode.removeChild(context.canvas);
-					callback();
-				}
+		if(preloadCompletedObjects < preloadTotalObjects){
+			// Keep showing it until it's done!
+			window.setTimeout(function() { showPreloader(context, callback); }, 50);
+			context.fillStyle = "rgba(0,0,0,1)";
+			context.fillRect(context.canvas.width / 2 - 102, context.canvas.height / 2 - 12, 204, 24);
+			context.fillStyle = "rgba(255,255,255,1)";
+			context.fillRect(context.canvas.width / 2 - 100, context.canvas.height / 2 - 10, 200, 20);
+			context.fillStyle = "rgba(0,255,128,1)";
+			context.fillRect(context.canvas.width / 2 - 100, context.canvas.height / 2 - 10, preloadCompletedObjects * 200.0 / preloadTotalObjects, 20);
+		}
+		else{
+			context.canvas.parentNode.removeChild(context.canvas);
+			callback();
+		}
 	};
 
 	// Makes a canvas filling the parent element
@@ -80,14 +78,14 @@ define([], function() {
 			element = document.body;
 		}
 
-		var _canvas = document.createElement("canvas");
-		var _context = _canvas.getContext("2d");
-		element.appendChild(_canvas);
-		_canvas.width = element.clientWidth;
-		_canvas.height = element.clientHeight;
-		_context.width = element.clientWidth;
-		_context.height = element.clientHeight;
-		_showPreloader(_context, callback);
+		var canvas = document.createElement("canvas");
+		var context = canvas.getContext("2d");
+		element.appendChild(canvas);
+		canvas.width = element.clientWidth;
+		canvas.height = element.clientHeight;
+		context.width = element.clientWidth;
+		context.height = element.clientHeight;
+		showPreloader(context, callback);
 	};
 
 	// Log is viewable by checking this object or through some debug implementation
@@ -96,7 +94,7 @@ define([], function() {
 	lib.log = function(text, level){
 		level = level || 0;
 		lib.logMessages.push({
-			time:(new Date()).getTime() - startTime,
+			time:new Date().getTime() - startTime,
 			level:level,
 			message:text});
 			if(level >= lib.logLevel) {

@@ -17,7 +17,7 @@ define(["vector", "sprite", "input", "util"], function(Vector, Sprite, Input, Ut
 		self.root.add(self.root.scene);
 		self.root.ui = new Sprite(0, 0);
 		self.root.add(self.root.ui);
-		
+
 		if(parentElement === undefined) {
 			parentElement = document.body;
 		}
