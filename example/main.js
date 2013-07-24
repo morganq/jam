@@ -53,6 +53,7 @@ require(["jam", "../lib/sylvester"], function(jam, syl) {
 	  }
 	  if(jam.Input.justPressed("UP")) {
 		guy.velocity.y = -100;
+        jam.Sound.play("footstep1.mp3");
 	  }
 	});
 
