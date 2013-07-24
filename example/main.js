@@ -8,7 +8,7 @@ require(["jam", "../lib/sylvester"], function(jam, syl) {
   var main = function() {
 
 	var level = "1,0,0,0,0,0,0,1\n" +
-				"1,0,0,0,0,0,0,1\n" + 
+				"1,0,0,0,0,0,0,1\n" +
 				"1,0,0,0,0,0,1,1\n" +
 				"1,0,0,0,0,0,0,1\n" +
 				"1,1,0,0,0,0,0,1\n" +
@@ -26,13 +26,16 @@ require(["jam", "../lib/sylvester"], function(jam, syl) {
 	// convenience
 	var scene = g.root.scene;
 	scene.add(tm);
-		
+
 	var guy = new jam.Sprite(90, 0);
+    guy.walk = new jam.Sprite.Animation([0, 1], 6, 0, 0, function(){
+    });
 	guy.setImage("player_red.png", 16, 17);
 	scene.add(guy);
 	guy.acceleration.y = 250;
 
 	guy.on("update", function(dt) {
+      guy.playAnimation(guy.walk);
 		jam.Rect.collide(guy, tm);
 		if(jam.Input.down("LEFT")) {
 			guy.velocity.x = -50;

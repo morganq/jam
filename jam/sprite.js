@@ -1,8 +1,8 @@
 define(["util", "vector", "../lib/sylvester"], function(Util, Vector, Syl) {
 	var cls = function(x, y, image) {
-		var self = {};	
+		var self = {};
 
-		self.facing = cls.RIGHT;	
+		self.facing = cls.RIGHT;
 
 		self.x = x;
 		self.y = y;
@@ -39,7 +39,7 @@ define(["util", "vector", "../lib/sylvester"], function(Util, Vector, Syl) {
 		self.lastAnimation = null;
 		self.frame = null;
 		self.animationFrame = 0;
-		self._force = false;	
+		self._force = false;
 
 		// Loads an image; when it's finished loading, sets the sprite's image
 		// to it. Automatically adjusts the sprite's width and height.
@@ -107,7 +107,7 @@ define(["util", "vector", "../lib/sylvester"], function(Util, Vector, Syl) {
 		};
 
 		// Simply sets the animation to whatever you pass it.
-		self.playAnimation = function(animation, force) { 
+		self.playAnimation = function(animation, force) {
 			self.animation = animation;
 			if(force) { self._force = true; }
 			if(!self.frame || force){
@@ -118,7 +118,7 @@ define(["util", "vector", "../lib/sylvester"], function(Util, Vector, Syl) {
 
 		// If you don't want an animation, but you want a single frame from a spritesheet
 		self.setSingleFrame = function(index) {
-			self.frame = {x: index * self.width, y:0, w: self.width, h:self.height}; 
+			self.frame = {x: index * self.width, y:0, w: self.width, h:self.height};
 			self.animation = null;
 		}
 
@@ -132,7 +132,7 @@ define(["util", "vector", "../lib/sylvester"], function(Util, Vector, Syl) {
 
 				if(self.animation !== null){
 					self.animationFrame = (self.animationFrame + (elapsed * self.animation.rate));
-					if(self.animationFrame > self.animation.numFrames-1) // Wrap around the end
+					if(self.animationFrame > self.animation.numFrames) // Wrap around the end
 						{
 							self.animationFrame = 0;
 							if(self.animation.callback !== undefined){
@@ -165,14 +165,14 @@ define(["util", "vector", "../lib/sylvester"], function(Util, Vector, Syl) {
 				for (var i = 0; i < self.subSprites.length; ++i)
 					{
 						self.subSprites[i].update(elapsed);
-					}			
+					}
 		};
 
 		// List of objects to be removed
 		self._removeList = [];
 
 		// Scene Graph stuff
-		self.subSprites = [];	
+		self.subSprites = [];
 		self.parentSprite = null;
 
 		self.add = function(sprite){
@@ -186,7 +186,7 @@ define(["util", "vector", "../lib/sylvester"], function(Util, Vector, Syl) {
 					self._removeList.push(sprite);
 					sprite.parentSprite = null;
 				}
-		};		
+		};
 
 		// Finds the world-space transform. Recursively up through
 		// the scene graph.
@@ -200,7 +200,7 @@ define(["util", "vector", "../lib/sylvester"], function(Util, Vector, Syl) {
 										   [0, 1, self.y +self.height/2],
 										   [0, 0, 1]]);
 
-										   var rotationMatrix = Syl.Matrix.RotationZ(self.angle * Math.PI / 180);	
+										   var rotationMatrix = Syl.Matrix.RotationZ(self.angle * Math.PI / 180);
 										   var halfWidthTranslationMatrix = Syl.$M([
 																				   [1, 0, -self.width/2],
 																				   [0, 1, -self.height/2],
@@ -208,7 +208,7 @@ define(["util", "vector", "../lib/sylvester"], function(Util, Vector, Syl) {
 
 																				   return parentMatrix.x(
 																					   translationMatrix.x(
-																						   rotationMatrix.x(	
+																						   rotationMatrix.x(
 																											halfWidthTranslationMatrix)));
 		};
 
