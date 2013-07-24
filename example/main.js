@@ -28,23 +28,28 @@ require(["jam", "../lib/sylvester"], function(jam, syl) {
 	scene.add(tm);
 
 	var guy = new jam.Sprite(90, 0);
-    guy.walk = new jam.Sprite.Animation([0, 1], 6, 0, 0, function(){
+    guy.walk = new jam.Sprite.Animation([0, 1, 2, 3], 8, 0, 0, function(){
     });
+    guy.idle = new jam.Sprite.Animation([0], 0);
 	guy.setImage("player_red.png", 16, 17);
 	scene.add(guy);
 	guy.acceleration.y = 250;
 
 	guy.on("update", function(dt) {
-      guy.playAnimation(guy.walk);
 		jam.Rect.collide(guy, tm);
 		if(jam.Input.down("LEFT")) {
 			guy.velocity.x = -50;
+          guy.playAnimation(guy.walk);
+          guy.facing = jam.Sprite.LEFT;
 		}
 		else if (jam.Input.down("RIGHT")) {
 			guy.velocity.x = 50;
+          guy.playAnimation(guy.walk);
+          guy.facing = jam.Sprite.RIGHT;
 		}
 		else {
 			guy.velocity.x = 0;
+          guy.playAnimation(guy.idle);
 		}
 		if(jam.Input.justPressed("UP")) {
 			guy.velocity.y = -100;
