@@ -1,5 +1,5 @@
 require.config({
-	baseUrl:"../jam/",
+  baseUrl:"../jam/",
 });
 
 require(["jam", "../lib/sylvester"], function(jam, syl) {
@@ -8,13 +8,13 @@ require(["jam", "../lib/sylvester"], function(jam, syl) {
   var main = function() {
 
 	var level = "1,0,0,0,0,0,0,1\n" +
-				"1,0,0,0,0,0,0,1\n" +
-				"1,0,0,0,0,0,1,1\n" +
-				"1,0,0,0,0,0,0,1\n" +
-				"1,1,0,0,0,0,0,1\n" +
-				"1,0,0,0,0,0,0,1\n" +
-				"1,0,0,0,0,0,0,1\n" +
-				"1,1,1,1,1,1,1,1\n";
+	  "1,0,0,0,0,0,0,1\n" +
+	  "1,0,0,0,0,0,1,1\n" +
+	  "1,0,0,0,0,0,0,1\n" +
+	  "1,1,0,0,0,0,0,1\n" +
+	  "1,0,0,0,0,0,0,1\n" +
+	  "1,0,0,0,0,0,0,1\n" +
+	  "1,1,1,1,1,1,1,1\n";
 
 	var g = new jam.Game(320, 240, document.body, 2);
 
@@ -36,30 +36,30 @@ require(["jam", "../lib/sylvester"], function(jam, syl) {
 	guy.acceleration.y = 250;
 
 	guy.on("update", function(dt) {
-		jam.Rect.collide(guy, tm);
-		if(jam.Input.down("LEFT")) {
-			guy.velocity.x = -50;
-          guy.playAnimation(guy.walk);
-          guy.facing = jam.Sprite.LEFT;
-		}
-		else if (jam.Input.down("RIGHT")) {
-			guy.velocity.x = 50;
-          guy.playAnimation(guy.walk);
-          guy.facing = jam.Sprite.RIGHT;
-		}
-		else {
-			guy.velocity.x = 0;
-          guy.playAnimation(guy.idle);
-		}
-		if(jam.Input.justPressed("UP")) {
-			guy.velocity.y = -100;
-		}
+	  jam.Rect.collide(guy, tm);
+	  if(jam.Input.down("LEFT")) {
+		guy.velocity.x = -50;
+        guy.playAnimation(guy.walk);
+        guy.facing = jam.Sprite.LEFT;
+	  }
+	  else if (jam.Input.down("RIGHT")) {
+		guy.velocity.x = 50;
+        guy.playAnimation(guy.walk);
+        guy.facing = jam.Sprite.RIGHT;
+	  }
+	  else {
+		guy.velocity.x = 0;
+        guy.playAnimation(guy.idle);
+	  }
+	  if(jam.Input.justPressed("UP")) {
+		guy.velocity.y = -100;
+	  }
 	});
 
 	g.root.on("update", function() {
-		if(jam.Input.justPressed("MOUSE_LEFT")){
-			console.log([jam.Input.mouse.x, jam.Input.mouse.y]);
-		}
+	  if(jam.Input.justPressed("MOUSE_LEFT")){
+		console.log([jam.Input.mouse.x, jam.Input.mouse.y]);
+	  }
 	});
 
 	g.run();
@@ -68,6 +68,8 @@ require(["jam", "../lib/sylvester"], function(jam, syl) {
   var preload = function() {
 	jam.preload("image.png");
 	jam.preload("tiles.png");
+	jam.preload("player_red.png");
+	jam.preload("footstep1.mp3");
 	jam.showPreloader(main);
   };
 
