@@ -24,14 +24,14 @@ define([], function() {
 
 		var obj;
 		// IMAGE
-		if(url.match(/\.(jpeg|jpg|png|gif)(\?.*)?$/)){
+		if(url.match(/\.(jpeg|jpg|png|gif)(\?.*)?$/) || url.match(/^data:image/)){
 			obj = new Image(url);
 			obj.onload = function(){ onload(obj); };
 			obj.src = url;
 			lib.cache[url] = obj;
 		}
 		// SOUND
-		else if (url.match(/\.(mp3|ogg|wav)(\?.*)?$/)){
+		else if (url.match(/\.(mp3|ogg|wav)(\?.*)?$/) || url.match(/^data:audio/)){
 			obj = new Audio();
 			obj.addEventListener("loadeddata", function(){ onload(obj); }, false);
 			obj.src = url;
