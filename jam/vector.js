@@ -1,49 +1,45 @@
 define([], function() {
-	var cls = function(x, y) {
-		var self = {};
+  var vector = function(x, y) {
+	this.x = x;
+	this.y = y;
+  };
 
-		self.x = x;
-		self.y = y;
-		
-		// Returns a nice string representation of the vector
-		self.toString = function() { return "<" + self.x + ", " + self.y + ">"; };
-		
-		// Gets the length of the vector
-		self.getLength = function() { return Math.sqrt(self.x*self.x+self.y*self.y); };
-		
-		// Gets the squared length of the vector. This avoids expensive square root
-		// and should be used for comparisons (squaring both sides of the equation)
-		self.getLengthSq = function() { return self.x*self.x+self.y*self.y; };
-		
-		self.equals = function(v) { return self.x === v.x && self.y === v.y; };
-		
-		return self;
-	};
+  // Returns a nice string representation of the vector.
+  vector.prototype.toString = function() { return "<" + this.x + ", " + this.y + ">"; };
 
-	// Adds a vector to a vector
-	cls.add = function(v1, v2){
-		return new cls(v1.x + v2.x, v1.y + v2.y);
-	};
+  // Gets the length of the vector.
+  vector.prototype.getLength = function() { return Math.sqrt(this.x*this.x+this.y*this.y); };
 
-	// Subtracts vector 2 from vector 1
-	cls.sub = function(v1, v2){
-		return new cls(v1.x - v2.x, v1.y - v2.y);
-	};
+  // Gets the squared length of the vector. This avoids expensive square root
+  // and should be used for comparisons (squaring both sides of the equation).
+  vector.prototype.getLengthSq = function() { return this.x*this.x+this.y*this.y; };
 
-	// Multiplies a vector by a scalar
-	cls.mul = function(v, s){
-		return new cls(v.x * s, v.y * s);
-	};
+  vector.prototype.equals = function(v) { return this.x === v.x && this.y === v.y; };
 
-	// Divides a vector by a scalar
-	cls.div = function(v, s){
-		return new cls(v.x / s, v.y / s);
-	};
+  // Adds a vector to a vector
+  vector.add = function(v1, v2){
+	return new vector(v1.x + v2.x, v1.y + v2.y);
+  };
 
-	// returns true if the components of the vectors are equal
-	cls.compare = function(v1, v2){
-		return v1.x == v2.x && v1.y == v2.y;
-	};
+  // Subtracts vector 2 from vector 1
+  vector.sub = function(v1, v2){
+	return new vector(v1.x - v2.x, v1.y - v2.y);
+  };
 
-	return cls;
+  // Multiplies a vector by a scalar
+  vector.mul = function(v, s){
+	return new vector(v.x * s, v.y * s);
+  };
+
+  // Divides a vector by a scalar
+  vector.div = function(v, s){
+	return new vector(v.x / s, v.y / s);
+  };
+
+  // returns true if the components of the vectors are equal
+  vector.compare = function(v1, v2){
+	return v1.x == v2.x && v1.y == v2.y;
+  };
+
+  return vector;
 });
