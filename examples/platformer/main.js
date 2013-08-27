@@ -1,5 +1,5 @@
 require.config({
-  baseUrl:"../jam/",
+  baseUrl:"../../jam/",
 });
 
 require(["jam", "../lib/sylvester"], function(jam, syl) {
@@ -67,13 +67,12 @@ require(["jam", "../lib/sylvester"], function(jam, syl) {
   };
 
   var preload = function() {
-	jam.preload("image.png");
-	jam.preload("tiles.png");
-	jam.preload("player_red.png");
-	jam.preload("footstep1.mp3");
-	jam.showPreloader(main);
+  	jam.preload("image.png");
+  	jam.preload("tiles.png");
+  	jam.preload("player_red.png");
+  	jam.preload("footstep1.mp3");
+  	jam.showPreloader(main);
   };
 
-  preload();
   preload();
 });
